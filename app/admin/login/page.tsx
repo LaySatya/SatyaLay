@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-base-200">
-      <div className="w-5xl bg-white shadow-xl">
+      <div className="w-5xl shadow-xl">
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* LEFT IMAGE */}
           <div className="hidden md:block">
