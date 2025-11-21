@@ -1,18 +1,15 @@
 "use client";
-import ProtectedRoute from "@/app/components/ProtectedRoute";
-import { auth } from "@/app/lib/firebase";
-import { signOut } from "firebase/auth";
 
-export default function AdminDashboardPage() {
-    const handleLogout = async () => {
-        await signOut(auth);
-    }
-    return (
-        <ProtectedRoute>
-            <div>Admin Dashboard</div>
-             <button onClick={handleLogout}>
-                Logout
-            </button>
-        </ProtectedRoute>
-    );
+import ProtectedRoute from "@/app/admin/components/ProtectedRoute";
+import AdminLayout from "../components/AdminLayout";
+
+export default function DashboardPage() {
+  return (
+    <ProtectedRoute>
+      <AdminLayout>
+        <h1 className="text-2xl font-bold mb-4">Welcome to the Dashboard</h1>
+        <p>Add your dashboard widgets or stats here.</p>
+      </AdminLayout>
+    </ProtectedRoute>
+  );
 }
