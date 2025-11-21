@@ -3,7 +3,8 @@
 export default function Home() {
   return (
     <div>
-      <h1>Welcome to the Home Page</h1>
+      <h1>Welcome to Daisy UI</h1>
+      <button className="btn">Default</button>
     </div>
   );
 }
