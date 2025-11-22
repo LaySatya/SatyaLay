@@ -5,6 +5,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import { useState, useEffect } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
+import AdminLoading from "../components/AdminLoading";
 
 export default function AdminAboutMePage() {
   const [profile, setProfile] = useState<any>(null);
@@ -67,7 +68,10 @@ export default function AdminAboutMePage() {
       } catch (error) {
         console.error("Error fetching About Me:", error);
       } finally {
-        setLoading(false);
+        // let loading delay for better UX
+        setTimeout(() => setLoading(false), 1000);
+        //
+        // setLoading(false);
       }
     }
     fetchProfile();
@@ -115,7 +119,11 @@ export default function AdminAboutMePage() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return (
+    <AdminLayout>
+      <AdminLoading />
+    </AdminLayout>
+  );
 
   return (
     <ProtectedRoute>
