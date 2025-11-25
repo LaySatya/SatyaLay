@@ -26,29 +26,14 @@ import {
 } from "@heroicons/react/24/outline";
 import AdminLoading from "../components/AdminLoading";
 
-type BlogPost = {
-  id?: string;
-  title: string;
-  slug: string;
-  category: string;
-  author: string;
-  content: string;
-  tags: string[];
-  published: boolean;
-  coverImage?: string;
-  order?: number;
-  createdAt?: any;
-  updatedAt?: any;
-};
-
 export default function AdminBlogPostsPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   // modal state
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState(null);
 
   // form fields
   const [title, setTitle] = useState("");
@@ -61,7 +46,7 @@ export default function AdminBlogPostsPage() {
   const [coverImage, setCoverImage] = useState("");
 
   // validation
-  const [errors, setErrors] = useState<{ [k: string]: string }>({});
+  const [errors, setErrors] = useState({});
 
   // fetch posts
   useEffect(() => {
@@ -73,7 +58,7 @@ export default function AdminBlogPostsPage() {
     try {
       const q = query(collection(db, "blogPosts"), orderBy("createdAt", "desc"));
       const snap = await getDocs(q);
-      const list: BlogPost[] = snap.docs.map((d) => ({ id: d.id, ...(d.data() as BlogPost) }));
+      const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       setPosts(list);
     } catch (e) {
       console.error("Failed to fetch posts:", e);
@@ -100,7 +85,7 @@ export default function AdminBlogPostsPage() {
     setModalOpen(true);
   };
 
-  const openEdit = (p: BlogPost) => {
+  const openEdit = (p) => {
     setEditingId(p.id || null);
     setTitle(p.title);
     setSlug(p.slug);
@@ -115,15 +100,14 @@ export default function AdminBlogPostsPage() {
   };
 
   const validate = () => {
-    const e: { [k: string]: string } = {};
+    const e = {};
     if (!title.trim()) e.title = "Title is required";
     if (!content.trim()) e.content = "Content is required";
-    // optional: check slug pattern
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
-  const generateSlug = (text: string) =>
+  const generateSlug = (text) =>
     text
       .toLowerCase()
       .trim()
@@ -136,7 +120,7 @@ export default function AdminBlogPostsPage() {
 
     const slugValue = slug?.trim() ? slug.trim() : generateSlug(title);
 
-    const payload: any = {
+    const payload = {
       title: title.trim(),
       slug: slugValue,
       category: category.trim(),
@@ -172,7 +156,7 @@ export default function AdminBlogPostsPage() {
     }
   };
 
-  const handleDelete = async (id?: string) => {
+  const handleDelete = async (id) => {
     if (!id) return;
     if (!confirm("Delete this post?")) return;
     try {
@@ -184,7 +168,7 @@ export default function AdminBlogPostsPage() {
     }
   };
 
-  const fmtDate = (ts: any) => {
+  const fmtDate = (ts) => {
     try {
       if (!ts) return "—";
       const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -254,9 +238,7 @@ export default function AdminBlogPostsPage() {
                           <CalendarDaysIcon className="w-4 h-4" />
                           <span>{fmtDate(p.createdAt)}</span>
                         </div>
-                        <div className="mt-1">
-                          Updated: {fmtDate(p.updatedAt)}
-                        </div>
+                        <div className="mt-1">Updated: {fmtDate(p.updatedAt)}</div>
                       </div>
                     </div>
 
@@ -266,10 +248,7 @@ export default function AdminBlogPostsPage() {
                       <div className="flex items-center gap-2">
                         {p.tags &&
                           p.tags.slice(0, 5).map((t, i) => (
-                            <span
-                              key={i}
-                              className="text-xs bg-cyan-100 text-cyan-700 px-2 py-0.5 rounded-md"
-                            >
+                            <span key={i} className="text-xs bg-cyan-100 text-cyan-700 px-2 py-0.5 rounded-md">
                               {t}
                             </span>
                           ))}
@@ -325,9 +304,7 @@ export default function AdminBlogPostsPage() {
               <div className="relative w-full max-w-3xl bg-white rounded-lg shadow-lg z-50 overflow-auto max-h-[90vh]">
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-semibold">
-                      {editingId ? "Edit Blog Post" : "Add Blog Post"}
-                    </h3>
+                    <h3 className="text-xl font-semibold">{editingId ? "Edit Blog Post" : "Add Blog Post"}</h3>
                     <div className="text-sm text-gray-500">{editingId ? "Editing" : "New"}</div>
                   </div>
 

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { ReactNode, useState, useEffect, JSX } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/app/context/AuthContext";
 import { signOut } from "firebase/auth";
 import { auth } from "@/app/lib/firebase";
@@ -23,13 +23,7 @@ import {
   ArrowDownCircleIcon,
 } from "@heroicons/react/24/outline";
 
-interface SidebarItem {
-  name: string;
-  href: string;
-  icon: JSX.Element;
-}
-
-const sidebarItems: SidebarItem[] = [
+const sidebarItems = [
   {
     name: "Dashboard",
     href: "/admin/dashboard",
@@ -83,13 +77,9 @@ const sidebarItems: SidebarItem[] = [
   },
 ];
 
-interface AdminLayoutProps {
-  children: ReactNode;
-}
-
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default function AdminLayout({ children }) {
   const { user } = useAuth();
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState("light");
   const pathname = usePathname();
 
   // Theme toggle
@@ -103,7 +93,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   };
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark";
+    const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
       setTheme(savedTheme);
       document.documentElement.setAttribute("data-theme", savedTheme);

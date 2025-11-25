@@ -13,15 +13,15 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
       setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/admin/dashboard");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err?.message || String(err));
     } finally {
       setLoading(false);
     }
@@ -34,6 +34,7 @@ export default function AdminLoginPage() {
           {/* LEFT IMAGE */}
           <div className="hidden md:block">
             <img
+            
               src="/admin/admin-login.jpg"
               alt="Admin Login"
               className="h-full w-full object-cover rounded-r-lg"

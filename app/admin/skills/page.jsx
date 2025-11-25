@@ -19,24 +19,14 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { PencilIcon, TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 import AdminLoading from "../components/AdminLoading";
 
-type Skill = {
-  id?: string;
-  name: string;
-  level: number; // 0-100%
-  category: string;
-  description?: string;
-  order?: number;
-  createdAt?: any;
-};
-
 export default function AdminSkillsPage() {
-  const [skills, setSkills] = useState<Skill[]>([]);
+  const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [inlineEditingId, setInlineEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState(null);
+  const [inlineEditingId, setInlineEditingId] = useState(null);
 
   // form fields
   const [name, setName] = useState("");
@@ -54,8 +44,8 @@ export default function AdminSkillsPage() {
         const data = snap.docs.map((d, i) => ({
           id: d.id,
           order: i,
-          ...(d.data() as any),
-        })) as Skill[];
+          ...d.data(),
+        }));
         setSkills(data);
       } catch (e) {
         console.error("Failed to fetch skills:", e);
@@ -76,7 +66,7 @@ export default function AdminSkillsPage() {
     setModalOpen(true);
   };
 
-  const openEdit = (item: Skill) => {
+  const openEdit = (item) => {
     setEditingId(item.id || null);
     setName(item.name);
     setLevel(item.level);
@@ -99,9 +89,7 @@ export default function AdminSkillsPage() {
           updatedAt: serverTimestamp(),
         });
         setSkills((prev) =>
-          prev.map((it) =>
-            it.id === editingId ? { ...it, name, level, category, description } : it
-          )
+          prev.map((it) => (it.id === editingId ? { ...it, name, level, category, description } : it))
         );
       } else {
         const docRef = await addDoc(collection(db, "skills"), {
@@ -126,7 +114,7 @@ export default function AdminSkillsPage() {
     }
   };
 
-  const handleDelete = async (id?: string) => {
+  const handleDelete = async (id) => {
     if (!id) return;
     if (!confirm("Delete this skill?")) return;
     try {
@@ -139,7 +127,7 @@ export default function AdminSkillsPage() {
   };
 
   // drag & drop
-  const handleDragEnd = async (result: any) => {
+  const handleDragEnd = async (result) => {
     if (!result.destination) return;
 
     const newList = Array.from(skills);
@@ -150,7 +138,7 @@ export default function AdminSkillsPage() {
 
     try {
       newList.forEach(async (item, i) => {
-        await updateDoc(doc(db, "skills", item.id!), { order: i });
+        if (item.id) await updateDoc(doc(db, "skills", item.id), { order: i });
       });
     } catch (e) {
       console.error("Failed to save order", e);
@@ -182,7 +170,7 @@ export default function AdminSkillsPage() {
             {(p) => (
               <div ref={p.innerRef} {...p.droppableProps} className="space-y-4">
                 {skills.map((item, index) => (
-                  <Draggable key={item.id} draggableId={item.id!} index={index}>
+                  <Draggable key={item.id || index} draggableId={String(item.id || index)} index={index}>
                     {(p) => (
                       <div
                         ref={p.innerRef}
@@ -199,18 +187,12 @@ export default function AdminSkillsPage() {
                                 value={item.name}
                                 onChange={(e) =>
                                   setSkills((prev) =>
-                                    prev.map((it) =>
-                                      it.id === item.id
-                                        ? { ...it, name: e.target.value }
-                                        : it
-                                    )
+                                    prev.map((it) => (it.id === item.id ? { ...it, name: e.target.value } : it))
                                   )
                                 }
                                 onBlur={async () => {
                                   setInlineEditingId(null);
-                                  await updateDoc(doc(db, "skills", item.id!), {
-                                    name: item.name,
-                                  });
+                                  if (item.id) await updateDoc(doc(db, "skills", item.id), { name: item.name });
                                 }}
                               />
                             ) : (
@@ -232,9 +214,7 @@ export default function AdminSkillsPage() {
                                 value={item.level}
                                 max="100"
                               ></progress>
-                              <div className="text-sm text-gray-500 mt-1">
-                                {item.level}% skill level
-                              </div>
+                              <div className="text-sm text-gray-500 mt-1">{item.level}% skill level</div>
                             </div>
                           </div>
 
@@ -268,9 +248,7 @@ export default function AdminSkillsPage() {
         {modalOpen && (
           <div className="modal modal-open">
             <div className="modal-box max-w-2xl">
-              <h3 className="text-2xl font-bold mb-4">
-                {editingId ? "Edit Skill" : "Add Skill"}
-              </h3>
+              <h3 className="text-2xl font-bold mb-4">{editingId ? "Edit Skill" : "Add Skill"}</h3>
 
               <div className="space-y-4">
                 <div>

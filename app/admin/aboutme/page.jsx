@@ -8,7 +8,7 @@ import { db } from "@/app/lib/firebase";
 import AdminLoading from "../components/AdminLoading";
 
 export default function AdminAboutMePage() {
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -70,8 +70,6 @@ export default function AdminAboutMePage() {
       } finally {
         // let loading delay for better UX
         setTimeout(() => setLoading(false), 1000);
-        //
-        // setLoading(false);
       }
     }
     fetchProfile();
