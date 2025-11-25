@@ -200,8 +200,8 @@ export default function AdminLayout({ children }) {
       <div className="drawer-side is-drawer-close:overflow-visible">
         <label htmlFor="admin-drawer" className="drawer-overlay"></label>
         <div className="flex min-h-full flex-col items-start bg-base-100 is-drawer-close:w-20 is-drawer-open:w-64 ">
-          <ul className="menu w-full grow p-4">
-            <span className="text-xl font-bold pb-4">Satya</span>
+          <ul className="menu w-full grow p-4 mt-8">
+            {/* <span className="text-xl font-bold pb-4">Satya</span> */}
             {sidebarItems.map((item) => (
               <li key={item.href} className="py-2">
                 <Link
