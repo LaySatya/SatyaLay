@@ -46,7 +46,7 @@ export default function DashboardPage() {
     about: 0,
   });
   const [loading, setLoading] = useState(true);
-
+  const [finance, setFinance] = useState({ income: 0, spending: 0, balance: 0 });
   useEffect(() => {
     let mounted = true;
 
@@ -77,12 +77,26 @@ export default function DashboardPage() {
           })
         );
 
-        // about — single doc "aboutMe/main"
+        // about  single doc "aboutMe/main"
         try {
           const aboutDoc = await getDoc(doc(db, "aboutMe", "main"));
           nextCounts.about = aboutDoc.exists() ? 1 : 0;
         } catch {
           nextCounts.about = 0;
+        }
+
+        // Finance summary
+        try {
+          const snap = await getDocs(collection(db, "financeRecords"));
+          let income = 0, spending = 0;
+          snap.forEach((doc) => {
+            const d = doc.data();
+            if (d.type === "income") income += d.amount || 0;
+            if (d.type === "spending") spending += d.amount || 0;
+          });
+          if (mounted) setFinance({ income, spending, balance: income - spending });
+        } catch {
+          if (mounted) setFinance({ income: 0, spending: 0, balance: 0 });
         }
 
         if (mounted) {
@@ -99,12 +113,12 @@ export default function DashboardPage() {
       mounted = false;
     };
   }, []);
-    if (loading)
-      return (
-        <AdminLayout>
-          <AdminLoading />
-        </AdminLayout>
-      );
+  if (loading)
+    return (
+      <AdminLayout>
+        <AdminLoading />
+      </AdminLayout>
+    );
 
   return (
     <ProtectedRoute>
@@ -114,7 +128,7 @@ export default function DashboardPage() {
           <p className="text-sm text-gray-500">Overview of your content and quick actions.</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           <StatCard title="Projects" count={counts.projects} icon={CubeIcon} loading={loading} />
           <StatCard title="Blog posts" count={counts.blogs} icon={DocumentTextIcon} loading={loading} />
           <StatCard title="About entries" count={counts.about} icon={PencilSquareIcon} loading={loading} />
@@ -122,6 +136,8 @@ export default function DashboardPage() {
           <StatCard title="Experience" count={counts.experience} icon={Cog6ToothIcon} loading={loading} />
           <StatCard title="Education" count={counts.education} icon={AcademicCapIcon} loading={loading} />
         </div>
+
+
 
         {/* <section className="mt-6">
           <div className="bg-white dark:bg-base-100 border border-gray-100 dark:border-base-300 rounded-xl p-4 shadow-sm">

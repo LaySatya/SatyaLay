@@ -21,6 +21,7 @@ import {
   ChatBubbleLeftRightIcon,
   PhoneIcon,
   ArrowDownCircleIcon,
+  CurrencyDollarIcon,
 } from "@heroicons/react/24/outline";
 
 const sidebarItems = [
@@ -61,9 +62,9 @@ const sidebarItems = [
     icon: <CodeBracketIcon className="h-6 w-6" />,
   },
   {
-    name: "Testimonials",
-    href: "/admin/testimonials",
-    icon: <ChatBubbleLeftRightIcon className="h-6 w-6" />,
+    name: "Finance",
+    href: "/admin/finance",
+    icon: <CurrencyDollarIcon className="h-6 w-6" />,
   },
   {
     name: "Contact Info",
