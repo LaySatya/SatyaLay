@@ -128,18 +128,18 @@ export default function AdminAboutMePage() {
       <AdminLayout>
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">About Me</h1>
-          <button className="btn btn-info text-white" onClick={() => setModalOpen(true)}>
+          <button className="btn btn-info" onClick={() => setModalOpen(true)}>
             Edit / Add Info
           </button>
         </div>
 
         {/* Display current info */}
         {profile && (
-          <div className="card p-6 bg-base-100 shadow-md mb-6">
+          <div className="card p-6 shadow-md mb-6">
             <h2 className="text-2xl font-bold mb-2">
               {profile.firstName || "First Name"} {profile.lastName || "Last Name"}
             </h2>
-            <p className="italic text-gray-500 mb-2">{profile.position || "Your Position"}</p>
+            <p className="italic mb-2">{profile.position || "Your Position"}</p>
             <p className="mb-2">{profile.description || "Add your bio here."}</p>
 
             {profile.resumeUrl && (

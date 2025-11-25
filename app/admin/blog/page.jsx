@@ -185,255 +185,194 @@ export default function AdminBlogPostsPage() {
       </AdminLayout>
     );
 
+
   return (
     <ProtectedRoute>
       <AdminLayout>
-        <div className="p-6">
-          {/* header */}
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-bold">Blog Posts</h1>
-              <p className="text-sm text-gray-500">Manage posts — drafts and published articles</p>
-            </div>
+  <div className="p-0 md:p-8 min-h-screen">
+    {/* header */}
+    <div className="flex justify-between items-center mb-6">
+      <h1 className="text-2xl font-bold">Blog Posts</h1>
+      <button className="btn bg-cyan-500" onClick={openAdd}>
+        <PlusIcon className="w-5 h-5" />
+        Add Post
+      </button>
+    </div>
 
-            <div className="flex items-center gap-3">
-              <button
-                onClick={openAdd}
-                className="inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow"
-              >
-                <PlusIcon className="w-4 h-4" />
-                Add Post
-              </button>
-            </div>
+    {/* list */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+      {posts.length === 0 && (
+        <div className="col-span-full text-center py-12">No posts yet.</div>
+      )}
+
+      {posts.map((p) => (
+        <div key={p.id} className="card p-6 shadow-md mb-6 flex flex-col gap-3 relative border border-cyan-500">
+          <h2 className="text-xl font-bold mb-2">{p.title}</h2>
+          <p className="italic mb-2">{p.category || "Uncategorized"} • {p.author || "Unknown author"}</p>
+          <p className="mb-2">{p.content}</p>
+          <div className="flex items-center gap-2 text-xs mb-2">
+            <CalendarDaysIcon className="w-4 h-4" />
+            <span>{fmtDate(p.createdAt)}</span>
+            <span className="ml-2">Updated: {fmtDate(p.updatedAt)}</span>
           </div>
-
-          {/* list */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {posts.length === 0 && <div className="text-gray-500">No posts yet.</div>}
-
-            {posts.map((p) => (
-              <div key={p.id} className="card bg-base-100 shadow-sm p-4 rounded-lg">
-                <div className="flex gap-4">
-                  {/* thumbnail */}
-                  <div className="w-28 h-20 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
-                    {p.coverImage ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={p.coverImage} alt={p.title} className="object-cover w-full h-full" />
-                    ) : (
-                      <div className="text-sm text-gray-400">No Image</div>
-                    )}
-                  </div>
-
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <h2 className="text-lg font-semibold">{p.title}</h2>
-                        <div className="text-sm text-gray-500 mt-1">
-                          {p.category} • {p.author || "Unknown author"}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col items-end text-xs text-gray-500">
-                        <div className="flex items-center gap-1">
-                          <CalendarDaysIcon className="w-4 h-4" />
-                          <span>{fmtDate(p.createdAt)}</span>
-                        </div>
-                        <div className="mt-1">Updated: {fmtDate(p.updatedAt)}</div>
-                      </div>
-                    </div>
-
-                    <p className="text-sm text-gray-600 mt-2 line-clamp-3">{p.content}</p>
-
-                    <div className="mt-3 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        {p.tags &&
-                          p.tags.slice(0, 5).map((t, i) => (
-                            <span key={i} className="text-xs bg-cyan-100 text-cyan-700 px-2 py-0.5 rounded-md">
-                              {t}
-                            </span>
-                          ))}
-
-                        {p.tags && p.tags.length > 5 && (
-                          <span className="text-xs text-gray-400">+{p.tags.length - 5}</span>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`px-2 py-1 rounded-md text-xs ${
-                            p.published ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                          }`}
-                        >
-                          {p.published ? "Published" : "Draft"}
-                        </span>
-
-                        <button
-                          onClick={() => openEdit(p)}
-                          className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-cyan-500 text-white hover:bg-cyan-600"
-                        >
-                          <PencilSquareIcon className="w-4 h-4" />
-                          Edit
-                        </button>
-
-                        <button
-                          onClick={() => handleDelete(p.id)}
-                          className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-red-100 text-red-600 hover:bg-red-200"
-                        >
-                          <TrashIcon className="w-4 h-4" />
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* modal */}
-          {modalOpen && (
-            <div className="fixed inset-0 z-40 flex items-center justify-center px-4">
-              <div
-                className="absolute inset-0 bg-black/40"
-                onClick={() => {
-                  setModalOpen(false);
-                  resetForm();
-                }}
-              />
-
-              <div className="relative w-full max-w-3xl bg-white rounded-lg shadow-lg z-50 overflow-auto max-h-[90vh]">
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-semibold">{editingId ? "Edit Blog Post" : "Add Blog Post"}</h3>
-                    <div className="text-sm text-gray-500">{editingId ? "Editing" : "New"}</div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Title */}
-                    <div className="flex flex-col">
-                      <label className="text-sm font-medium">Title *</label>
-                      <input
-                        className={`input input-bordered rounded-md ${errors.title ? "input-error" : ""}`}
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Post title"
-                      />
-                      {errors.title && <div className="text-xs text-red-600 mt-1">{errors.title}</div>}
-                    </div>
-
-                    {/* Slug */}
-                    <div className="flex flex-col">
-                      <label className="text-sm font-medium">Slug</label>
-                      <input
-                        className="input input-bordered rounded-md"
-                        value={slug}
-                        onChange={(e) => setSlug(e.target.value)}
-                        placeholder="Optional: custom url slug"
-                      />
-                      <div className="text-xs text-gray-400 mt-1">Leave empty to auto-generate</div>
-                    </div>
-
-                    {/* Category */}
-                    <div className="flex flex-col">
-                      <label className="text-sm font-medium">Category</label>
-                      <input
-                        className="input input-bordered rounded-md"
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        placeholder="e.g., Tech, Travel"
-                      />
-                    </div>
-
-                    {/* Author */}
-                    <div className="flex flex-col">
-                      <label className="text-sm font-medium">Author</label>
-                      <input
-                        className="input input-bordered rounded-md"
-                        value={author}
-                        onChange={(e) => setAuthor(e.target.value)}
-                        placeholder="Author name"
-                      />
-                    </div>
-
-                    {/* Cover image */}
-                    <div className="md:col-span-2 flex flex-col">
-                      <label className="text-sm font-medium">Cover Image URL</label>
-                      <input
-                        className="input input-bordered rounded-md"
-                        value={coverImage}
-                        onChange={(e) => setCoverImage(e.target.value)}
-                        placeholder="https://..."
-                      />
-                      <div className="mt-2">
-                        {coverImage ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={coverImage} alt="cover" className="w-full max-h-48 object-cover rounded-md" />
-                        ) : (
-                          <div className="text-sm text-gray-400">No cover image — it will show a placeholder on the public site.</div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Tags */}
-                    <div className="md:col-span-2 flex flex-col">
-                      <label className="text-sm font-medium">Tags (comma separated)</label>
-                      <input
-                        className="input input-bordered rounded-md"
-                        value={tags}
-                        onChange={(e) => setTags(e.target.value)}
-                        placeholder="react, firebase, tips"
-                      />
-                    </div>
-
-                    {/* Content */}
-                    <div className="md:col-span-2 flex flex-col">
-                      <label className="text-sm font-medium">Content *</label>
-                      <textarea
-                        className={`textarea textarea-bordered w-full h-56 rounded-md ${errors.content ? "border-red-500" : ""}`}
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        placeholder="Write your article here..."
-                      />
-                      {errors.content && <div className="text-xs text-red-600 mt-1">{errors.content}</div>}
-                    </div>
-
-                    {/* Published */}
-                    <div className="flex items-center gap-3">
-                      <input
-                        id="published"
-                        type="checkbox"
-                        checked={published}
-                        onChange={() => setPublished(!published)}
-                        className="checkbox checkbox-primary"
-                      />
-                      <label htmlFor="published" className="font-medium">Published</label>
-                    </div>
-                  </div>
-
-                  {/* actions */}
-                  <div className="mt-6 flex items-center justify-end gap-3">
-                    <button
-                      className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
-                      onClick={() => {
-                        setModalOpen(false);
-                        resetForm();
-                      }}
-                    >
-                      Cancel
-                    </button>
-
-                    <button
-                      className="px-4 py-2 rounded-md bg-cyan-500 text-white hover:bg-cyan-600"
-                      onClick={handleSave}
-                      disabled={saving}
-                    >
-                      {saving ? "Saving..." : editingId ? "Save Changes" : "Create Post"}
-                    </button>
-                  </div>
-                </div>
-              </div>
+          {p.coverImage && (
+            <div className="mb-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={p.coverImage} alt={p.title} className="object-cover w-full max-h-32 rounded-lg" />
             </div>
           )}
+          <div className="flex flex-wrap gap-2 mb-2">
+            {p.tags && p.tags.slice(0, 5).map((t, i) => (
+              <span key={i} className="badge badge-outline">{t}</span>
+            ))}
+            {p.tags && p.tags.length > 5 && (
+              <span className="badge badge-outline">+{p.tags.length - 5}</span>
+            )}
+          </div>
+          <div className="flex items-center gap-2 mt-2">
+            <span className={`badge ${p.published ? "badge-success" : "badge-warning"}`}>{p.published ? "Published" : "Draft"}</span>
+            <button
+              onClick={() => openEdit(p)}
+              title="Edit"
+              className="btn btn-primary btn-sm"
+            >
+              <PencilSquareIcon className="w-4 h-4" />
+              Edit
+            </button>
+            <button
+              onClick={() => handleDelete(p.id)}
+              title="Delete"
+              className="btn btn-error btn-sm"
+            >
+              <TrashIcon className="w-4 h-4" />
+              Delete
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* modal for add/edit */}
+    {modalOpen && (
+      <div className="modal modal-open">
+        <div className="modal-box relative max-w-4xl w-full mx-4 sm:mx-auto">
+          <h3 className="text-2xl font-bold mb-6">{editingId ? "Edit Blog Post" : "Add Blog Post"}</h3>
+          <button
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+            onClick={() => {
+              setModalOpen(false);
+              resetForm();
+            }}
+          >
+            ✕
+          </button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="label">Title *</label>
+              <input
+                className={`input input-bordered w-full ${errors.title ? "input-error" : ""}`}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Post title"
+              />
+              {errors.title && <div className="text-xs text-red-600 mt-1">{errors.title}</div>}
+            </div>
+            <div>
+              <label className="label">Slug</label>
+              <input
+                className="input input-bordered w-full"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                placeholder="Optional: custom url slug"
+              />
+              <div className="text-xs mt-1">Leave empty to auto-generate</div>
+            </div>
+            <div>
+              <label className="label">Category</label>
+              <input
+                className="input input-bordered w-full"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                placeholder="e.g., Tech, Travel"
+              />
+            </div>
+            <div>
+              <label className="label">Author</label>
+              <input
+                className="input input-bordered w-full"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                placeholder="Author name"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="label">Cover Image URL</label>
+              <input
+                className="input input-bordered w-full"
+                value={coverImage}
+                onChange={(e) => setCoverImage(e.target.value)}
+                placeholder="https://..."
+              />
+              <div className="mt-2">
+                {coverImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={coverImage} alt="cover" className="w-full max-h-48 object-cover rounded-lg" />
+                ) : (
+                  <div className="text-sm">No cover image — it will show a placeholder on the public site.</div>
+                )}
+              </div>
+            </div>
+            <div className="md:col-span-2">
+              <label className="label">Tags (comma separated)</label>
+              <input
+                className="input input-bordered w-full"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                placeholder="react, firebase, tips"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="label">Content *</label>
+              <textarea
+                className={`textarea textarea-bordered w-full h-32 ${errors.content ? "border-red-500" : ""}`}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Write your article here..."
+              />
+              {errors.content && <div className="text-xs text-red-600 mt-1">{errors.content}</div>}
+            </div>
+            <div className="flex items-center gap-3 mt-2">
+              <input
+                id="published"
+                type="checkbox"
+                checked={published}
+                onChange={() => setPublished(!published)}
+                className="checkbox checkbox-primary"
+              />
+              <label htmlFor="published" className="font-medium">Published</label>
+            </div>
+          </div>
+          <div className="modal-action mt-6">
+            <button
+              onClick={() => {
+                setModalOpen(false);
+                resetForm();
+              }}
+              className="btn"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className={`btn btn-primary ${saving ? "loading" : ""}`}
+            >
+              {saving ? "Saving..." : editingId ? "Save Changes" : "Create Post"}
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
         </div>
       </AdminLayout>
     </ProtectedRoute>

@@ -18,6 +18,7 @@ import {
   Cog6ToothIcon,
   AcademicCapIcon,
 } from "@heroicons/react/24/outline";
+import AdminLoading from "../components/AdminLoading";
 
 function StatCard({ title, count, icon: Icon, className, loading }) {
   return (
@@ -98,6 +99,12 @@ export default function DashboardPage() {
       mounted = false;
     };
   }, []);
+    if (loading)
+      return (
+        <AdminLayout>
+          <AdminLoading />
+        </AdminLayout>
+      );
 
   return (
     <ProtectedRoute>
