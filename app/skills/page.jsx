@@ -3,75 +3,88 @@
 import { useEffect, useState } from "react";
 import { db } from "@/app/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { SparklesIcon } from "@heroicons/react/24/outline";
 import MainLayout from "../components/MainLayout";
+import ClientLoading from "../components/ClientLoading";
+import Image from "next/image";
+import { CodeBracketIcon } from "@heroicons/react/24/outline";
 
-export default function Skills() {
+function SkillBar({ name, percent, imageUrl }) {
+  return (
+    <div className="mb-4 flex items-center gap-3">
+      {imageUrl && (
+        <div className="h-8 w-8 relative">
+          <Image src={imageUrl} alt={name} fill className="object-contain rounded" />
+        </div>
+      )}
+      <div className="flex-1">
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-base font-medium">{name}</span>
+          <span className="text-base font-medium">{percent}%</span>
+        </div>
+        <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5">
+          <div
+            className="bg-cyan-500 h-2.5 rounded-full transition-all duration-700"
+            style={{ width: `${percent}%` }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function SkillsPage() {
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const skillsSnap = await getDocs(collection(db, "skills"));
-        setSkills(skillsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        const snap = await getDocs(collection(db, "skills"));
+        setSkills(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
       } catch (error) {
         console.error("Error fetching skills:", error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchSkills();
   }, []);
 
+  // Group skills by category
+  const grouped = skills.reduce((acc, skill) => {
+    const cat = skill.category || "Other";
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(skill);
+    return acc;
+  }, {});
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
+      <MainLayout>
+        <ClientLoading />
+      </MainLayout>
     );
   }
 
   return (
     <MainLayout>
-    <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-5xl font-bold mb-4 flex items-center gap-3">
-            <SparklesIcon className="h-12 w-12" />
-            My Skills
-          </h1>
-          <div className="h-1 w-20 bg-primary rounded-full"></div>
-          <p className="text-lg opacity-75 mt-6">
-            Technical expertise and professional capabilities.
-          </p>
-        </div>
-
-        {skills.length === 0 ? (
-          <div className="card border border-base-300">
-            <div className="card-body text-center py-16">
-              <p className="text-xl opacity-75">No skills added yet.</p>
+      <div className="max-w-6xl mx-auto py-4 px-4">
+        <h1 className="text-4xl font-bold mb-8 flex gap-4"><CodeBracketIcon className="w-10 h-10"/>Skills</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {Object.keys(grouped).map((cat) => (
+            <div key={cat} className="rounded-xl border border-base-300 p-8">
+              <h2 className="text-2xl font-bold mb-6">{cat}</h2>
+              {grouped[cat].length === 0 ? (
+                <p className="text-base opacity-60">No skills found.</p>
+              ) : (
+                grouped[cat].map((skill) => (
+                  <SkillBar key={skill.id} name={skill.name} percent={skill.level} imageUrl={skill.imageUrl} />
+                ))
+              )}
             </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {skills.map((skill) => (
-              <div key={skill.id} className="card border border-base-300 hover:shadow-lg transition-shadow hover:scale-105">
-                <div className="card-body">
-                  <h3 className="card-title text-xl mb-2">{skill.name}</h3>
-                  <div className="divider my-2"></div>
-                  <p className="text-sm opacity-75">Level: <span className="font-bold text-primary">{skill.proficiency || "Expert"}</span></p>
-                  {skill.description && (
-                    <p className="text-sm mt-3">{skill.description}</p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+          ))}
+        </div>
       </div>
-    </div>
     </MainLayout>
   );
 }

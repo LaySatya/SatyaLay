@@ -33,6 +33,7 @@ export default function AdminSkillsPage() {
   const [level, setLevel] = useState(50);
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   // fetch skills
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function AdminSkillsPage() {
     setLevel(50);
     setCategory("");
     setDescription("");
+    setImageUrl("");
     setModalOpen(true);
   };
 
@@ -72,12 +74,12 @@ export default function AdminSkillsPage() {
     setLevel(item.level);
     setCategory(item.category);
     setDescription(item.description || "");
+    setImageUrl(item.imageUrl || "");
     setModalOpen(true);
   };
 
   const handleSave = async () => {
     if (!name.trim()) return alert("Skill name required");
-
     setSaving(true);
     try {
       if (editingId) {
@@ -86,10 +88,11 @@ export default function AdminSkillsPage() {
           level,
           category,
           description,
+          imageUrl,
           updatedAt: serverTimestamp(),
         });
         setSkills((prev) =>
-          prev.map((it) => (it.id === editingId ? { ...it, name, level, category, description } : it))
+          prev.map((it) => (it.id === editingId ? { ...it, name, level, category, description, imageUrl } : it))
         );
       } else {
         const docRef = await addDoc(collection(db, "skills"), {
@@ -97,12 +100,13 @@ export default function AdminSkillsPage() {
           level,
           category,
           description,
+          imageUrl,
           createdAt: serverTimestamp(),
           order: skills.length,
         });
         setSkills((prev) => [
           ...prev,
-          { id: docRef.id, name, level, category, description, order: prev.length },
+          { id: docRef.id, name, level, category, description, imageUrl, order: prev.length },
         ]);
       }
       setModalOpen(false);
@@ -196,12 +200,17 @@ export default function AdminSkillsPage() {
                                 }}
                               />
                             ) : (
-                              <h2
-                                className="text-lg font-semibold cursor-pointer"
-                                onClick={() => setInlineEditingId(item.id)}
-                              >
-                                {item.name}
-                              </h2>
+                              <div className="flex items-center gap-2">
+                                {item.imageUrl && (
+                                  <img src={item.imageUrl} alt={item.name} className="h-8 w-8 object-contain rounded" />
+                                )}
+                                <h2
+                                  className="text-lg font-semibold cursor-pointer"
+                                  onClick={() => setInlineEditingId(item.id)}
+                                >
+                                  {item.name}
+                                </h2>
+                              </div>
                             )}
 
                             {/* Category */}
@@ -299,6 +308,21 @@ export default function AdminSkillsPage() {
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Short description about this skill"
                   />
+                </div>
+
+                <div>
+                  <label className="label">
+                    <span className="label-text">Skill Image URL</span>
+                  </label>
+                  <input
+                    className="input input-bordered w-full"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    placeholder="https://.../laravel.png"
+                  />
+                  {imageUrl && (
+                    <img src={imageUrl} alt="Skill preview" className="mt-2 h-12 w-12 object-contain rounded" />
+                  )}
                 </div>
               </div>
 

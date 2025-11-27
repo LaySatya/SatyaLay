@@ -19,6 +19,7 @@ export default function AdminAboutMePage() {
   const [position, setPosition] = useState("");
   const [description, setDescription] = useState("");
   const [resumeUrl, setResumeUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [socialLinks, setSocialLinks] = useState({
     github: "",
     linkedin: "",
@@ -41,6 +42,7 @@ export default function AdminAboutMePage() {
           setPosition(data.position || "");
           setDescription(data.description || "");
           setResumeUrl(data.resumeUrl || "");
+          setImageUrl(data.imageUrl || "");
           setSocialLinks(data.socialLinks || {
             github: "",
             linkedin: "",
@@ -54,6 +56,7 @@ export default function AdminAboutMePage() {
             position: "",
             description: "",
             resumeUrl: "",
+            imageUrl: "",
             socialLinks: {
               github: "",
               linkedin: "",
@@ -93,6 +96,7 @@ export default function AdminAboutMePage() {
           position,
           description,
           resumeUrl,
+          imageUrl,
           socialLinks,
           status: true,
         },
@@ -105,6 +109,7 @@ export default function AdminAboutMePage() {
         position,
         description,
         resumeUrl,
+        imageUrl,
         socialLinks,
         status: true,
       });
@@ -136,36 +141,49 @@ export default function AdminAboutMePage() {
         {/* Display current info */}
         {profile && (
           <div className="card p-6 shadow-md mb-6">
-            <h2 className="text-2xl font-bold mb-2">
-              {profile.firstName || "First Name"} {profile.lastName || "Last Name"}
-            </h2>
-            <p className="italic mb-2">{profile.position || "Your Position"}</p>
-            <p className="mb-2">{profile.description || "Add your bio here."}</p>
+            <div className="flex flex-col md:flex-row gap-6">
+              {profile.imageUrl && (
+                <div className="md:w-1/3">
+                  <img 
+                    src={profile.imageUrl} 
+                    alt="Profile" 
+                    className="w-full h-auto rounded-lg object-cover"
+                  />
+                </div>
+              )}
+              <div className="md:flex-1">
+                <h2 className="text-2xl font-bold mb-2">
+                  {profile.firstName || "First Name"} {profile.lastName || "Last Name"}
+                </h2>
+                <p className="italic mb-2">{profile.position || "Your Position"}</p>
+                <p className="mb-2">{profile.description || "Add your bio here."}</p>
 
-            {profile.resumeUrl && (
-              <a
-                href={profile.resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link link-primary"
-              >
-                View Resume
-              </a>
-            )}
+                {profile.resumeUrl && (
+                  <a
+                    href={profile.resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link link-primary"
+                  >
+                    View Resume
+                  </a>
+                )}
 
-            <div className="mt-4 flex gap-4 flex-wrap">
-              {profile.socialLinks?.github && (
-                <a href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">GitHub</a>
-              )}
-              {profile.socialLinks?.linkedin && (
-                <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">LinkedIn</a>
-              )}
-              {profile.socialLinks?.facebook && (
-                <a href={profile.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">Facebook</a>
-              )}
-              {profile.socialLinks?.telegram && (
-                <a href={profile.socialLinks.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">Telegram</a>
-              )}
+                <div className="mt-4 flex gap-4 flex-wrap">
+                  {profile.socialLinks?.github && (
+                    <a href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">GitHub</a>
+                  )}
+                  {profile.socialLinks?.linkedin && (
+                    <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">LinkedIn</a>
+                  )}
+                  {profile.socialLinks?.facebook && (
+                    <a href={profile.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">Facebook</a>
+                  )}
+                  {profile.socialLinks?.telegram && (
+                    <a href={profile.socialLinks.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">Telegram</a>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -232,6 +250,26 @@ export default function AdminAboutMePage() {
                     onChange={(e) => setResumeUrl(e.target.value)}
                     className="input input-bordered w-full"
                   />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="label">Profile Image URL</label>
+                  <input
+                    type="text"
+                    placeholder="Enter your profile image URL"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    className="input input-bordered w-full"
+                  />
+                  {imageUrl && (
+                    <div className="mt-4">
+                      <p className="label">Preview:</p>
+                      <img 
+                        src={imageUrl} 
+                        alt="Profile Preview" 
+                        className="w-40 h-40 rounded-lg object-cover"
+                      />
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="label">GitHub</label>
