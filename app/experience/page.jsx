@@ -41,7 +41,7 @@ export default function ExperiencePage() {
 
   return (
     <MainLayout>
-      <div className="max-w-6xl mx-auto py-12 px-4">
+      <div className="max-w-6xl mx-auto py-12 md:px-4">
         <h1 className="text-4xl font-bold mb-8 flex gap-4">
           <BuildingOfficeIcon className="w-10 h-10" /> Experience
         </h1>

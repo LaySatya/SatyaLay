@@ -1,119 +1,152 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { db } from "@/app/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import { CalendarIcon, CakeIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon, CakeIcon, QrCodeIcon } from "@heroicons/react/24/outline";
 import MainLayout from "../components/MainLayout";
+import Image from "next/image";
+
+const IMAGE_URL = "/home/birthday.jpg"; // Use correct public path
+
+// Calculate countdown based on a target date
+function getCountdown(targetDate) {
+  const now = new Date();
+  let diff = targetDate - now;
+
+  // If passed, set next year
+  if (diff < 0) {
+    targetDate = new Date(
+      targetDate.getFullYear() + 1,
+      targetDate.getMonth(),
+      targetDate.getDate(),
+      0,
+      0,
+      0
+    );
+    diff = targetDate - now;
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  return { days, hours, minutes, seconds };
+}
+
+// Get next birthday
+function getNextBirthday(month, day) {
+  const now = new Date();
+  let year = now.getFullYear();
+
+  const birthdayThisYear = new Date(year, month - 1, day, 0, 0, 0);
+
+  if (birthdayThisYear < now) {
+    year++;
+  }
+
+  return new Date(year, month - 1, day, 0, 0, 0);
+}
 
 export default function Birthday() {
-  const [birthday, setBirthday] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [daysUntil, setDaysUntil] = useState(0);
+  const [showImage, setShowImage] = useState(false);
+
+  // Static birthday (month, day)
+  const month = 10; // October
+  const day = 8; // 8th
+
+  const [countdown, setCountdown] = useState(
+    getCountdown(getNextBirthday(month, day))
+  );
 
   useEffect(() => {
-    const fetchBirthday = async () => {
-      try {
-        const bdayDoc = await getDoc(doc(db, "personal", "birthday"));
-        if (bdayDoc.exists()) {
-          setBirthday(bdayDoc.data());
-          calculateDaysUntil(bdayDoc.data().date);
-        }
-      } catch (error) {
-        console.error("Error fetching birthday:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const timer = setInterval(() => {
+      setCountdown(getCountdown(getNextBirthday(month, day)));
+    }, 1000);
 
-    fetchBirthday();
+    return () => clearInterval(timer);
   }, []);
-
-  const calculateDaysUntil = (dateString) => {
-    const today = new Date();
-    const [month, day] = dateString.split("/").map(Number);
-    const nextBirthday = new Date(today.getFullYear(), month - 1, day);
-
-    if (nextBirthday < today) {
-      nextBirthday.setFullYear(today.getFullYear() + 1);
-    }
-
-    const timeDiff = nextBirthday - today;
-    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-    setDaysUntil(daysDiff);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
-  }
 
   return (
     <MainLayout>
-    <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-5xl font-bold mb-4 flex items-center gap-3">
-            <CakeIcon className="h-12 w-12" />
-            Birthday
-          </h1>
-          <div className="h-1 w-20 bg-primary rounded-full"></div>
-        </div>
+      <div className="max-w-6xl mx-auto py-4">
+        <h1 className="text-4xl font-bold mb-8 flex gap-4">
+          <CakeIcon className="w-10 h-10" />
+          Birthday 
+        </h1>
 
-        {birthday ? (
-          <div className="space-y-8">
-            {/* Main Countdown Card */}
-            <div className="card border border-base-300 bg-gradient-to-br from-primary to-secondary text-primary-content">
-              <div className="card-body text-center py-16">
-                <p className="text-2xl opacity-90">My Birthday is on</p>
-                <p className="text-6xl font-bold my-4">{birthday.date}</p>
-                <div className="divider"></div>
-                <p className="text-3xl font-bold mt-6">
-                  {daysUntil === 0 ? "🎉 Today! 🎉" : `${daysUntil} days to go!`}
-                </p>
-                <p className="text-lg opacity-90 mt-6">{birthday.message || "Celebrating life's special day!"}</p>
-              </div>
+        <div className="card border border-cyan-500 shadow-sm p-8 flex flex-col items-center">
+          <h2 className="text-3xl font-bold mb-6 text-cyan-500">My Birthday</h2>
+
+          <div className="flex gap-5 mb-6">
+            <div>
+              <span className="countdown font-mono text-5xl">
+                <span style={{ "--value": countdown.days }}>
+                  {countdown.days}
+                </span>
+              </span>
+              <div className="text-sm mt-2">days</div>
             </div>
 
-            {/* Birthday Traditions */}
-            {birthday.traditions && (
-              <div className="card border border-base-300">
-                <div className="card-body">
-                  <h3 className="card-title text-2xl mb-4">🎂 Birthday Traditions</h3>
-                  <p className="leading-relaxed text-lg">{birthday.traditions}</p>
-                </div>
-              </div>
-            )}
+            <div>
+              <span className="countdown font-mono text-5xl">
+                <span style={{ "--value": countdown.hours }}>
+                  {countdown.hours}
+                </span>
+              </span>
+              <div className="text-sm mt-2">hours</div>
+            </div>
 
-            {/* Birthday Stats */}
-            <div className="stats stats-vertical lg:stats-horizontal shadow-lg border border-base-300 w-full">
-              <div className="stat">
-                <div className="stat-title">Next Birthday Date</div>
-                <div className="stat-value text-primary">{birthday.date}</div>
-              </div>
-              <div className="stat">
-                <div className="stat-title">Days Remaining</div>
-                <div className="stat-value text-primary">{daysUntil}</div>
-              </div>
-              <div className="stat">
-                <div className="stat-title">Celebration Status</div>
-                <div className="stat-value text-primary">{daysUntil === 0 ? "Today!" : "Coming Soon"}</div>
-              </div>
+            <div>
+              <span className="countdown font-mono text-5xl">
+                <span style={{ "--value": countdown.minutes }}>
+                  {countdown.minutes}
+                </span>
+              </span>
+              <div className="text-sm mt-2">min</div>
+            </div>
+
+            <div>
+              <span className="countdown font-mono text-5xl">
+                <span style={{ "--value": countdown.seconds }}>
+                  {countdown.seconds}
+                </span>
+              </span>
+              <div className="text-sm mt-2">sec</div>
             </div>
           </div>
-        ) : (
-          <div className="card border border-base-300">
-            <div className="card-body text-center py-16">
-              <p className="text-xl opacity-75">Birthday information not available yet.</p>
+
+          <button
+            className="btn bg-cyan-500 text-white mt-4"
+            onClick={() => setShowImage(true)}
+          >
+            <QrCodeIcon className="w-6 h-6" /> Pay me coffee
+          </button>
+        </div>
+
+        {showImage && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div className="bg-base-100 rounded-xl p-8 shadow-xl relative">
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                onClick={() => setShowImage(false)}
+              >
+                ✕
+              </button>
+
+              <h2 className="text-xl font-bold mb-4 text-center">Pay me coffee!</h2>
+
+              <div className="h-64 w-64 relative">
+                <Image
+                  src={IMAGE_URL}
+                  alt="Birthday"
+                  fill
+                  className="object-cover rounded-xl"
+                />
+              </div>
             </div>
           </div>
         )}
       </div>
-    </div>  
     </MainLayout>
-        
   );
 }

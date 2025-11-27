@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import Link from "next/link";
 
 
@@ -23,6 +23,15 @@ function MainLayout({ children }) {
   const pathname = usePathname();
   const [theme, setTheme] = React.useState("light");
   const [mounted, setMounted] = React.useState(false);
+  const menuRefs = useRef({});
+  const menuListRef = useRef(null);
+
+  useEffect(() => {
+    // Scroll the active menu item into view when pathname changes
+    if (menuRefs.current[pathname]) {
+      menuRefs.current[pathname].scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+    }
+  }, [pathname]);
 
   React.useEffect(() => {
     setMounted(true);
@@ -164,9 +173,9 @@ function MainLayout({ children }) {
 
             {/* Horizontal Menu */}
             <div className="flex justify-center bg-base-200 dark:bg-base-300 border-b border-base-300 overflow-x-auto">
-              <ul className="menu menu-horizontal gap-2 p-4 flex-nowrap">
+              <ul className="menu menu-horizontal gap-2 p-4 flex-nowrap" ref={menuListRef}>
                 {navLinks.map(({ href, label, icon: Icon }) => (
-                  <li key={href}>
+                  <li key={href} ref={el => { menuRefs.current[href] = el; }}>
                     <Link
                       href={href}
                       className={`flex items-center gap-2 whitespace-nowrap ${
