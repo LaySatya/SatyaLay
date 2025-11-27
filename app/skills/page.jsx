@@ -68,11 +68,11 @@ export default function SkillsPage() {
 
   return (
     <MainLayout>
-      <div className="max-w-6xl mx-auto py-4 px-4">
+      <div className="max-w-6xl mx-auto py-4 ">
         <h1 className="text-4xl font-bold mb-8 flex gap-4"><CodeBracketIcon className="w-10 h-10"/>Skills</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {Object.keys(grouped).map((cat) => (
-            <div key={cat} className="rounded-xl border border-base-300 p-8">
+            <div key={cat} className="rounded-xl border border-base-300 md:p-8 p-4">
               <h2 className="text-2xl font-bold mb-6">{cat}</h2>
               {grouped[cat].length === 0 ? (
                 <p className="text-base opacity-60">No skills found.</p>
