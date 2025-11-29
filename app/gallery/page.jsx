@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { db } from "@/app/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { PhotoIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import MainLayout from "../components/MainLayout";
 
 export default function Gallery() {
@@ -26,100 +27,85 @@ export default function Gallery() {
     fetchGallery();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
-  }
-
   return (
     <MainLayout>
-    <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-5xl font-bold mb-4 flex items-center gap-3">
-            <PhotoIcon className="h-12 w-12" />
-            Gallery
-          </h1>
-          <div className="h-1 w-20 bg-primary rounded-full"></div>
-          <p className="text-lg opacity-75 mt-6">
-            Moments and memories captured in time.
-          </p>
-        </div>
-
-        {gallery.length === 0 ? (
-          <div className="card border border-base-300">
-            <div className="card-body text-center py-16">
-              <p className="text-xl opacity-75">No photos yet. Check back soon!</p>
-            </div>
+      <div className="min-h-screen py-8 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4 flex items-center gap-3">
+              <PhotoIcon className="h-10 w-10 text-amber-500" />
+              Gallery
+            </h1>
+            <div className="h-1 w-20 bg-cyan-500 rounded-full"></div>
+            <p className="text-lg opacity-75 mt-2">
+              A collection of memorable moments and events.
+            </p>
           </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+          {loading ? (
+            <p className="text-center text-lg opacity-70">Loading...</p>
+          ) : gallery.length === 0 ? (
+            <div className="card border border-base-300">
+              <div className="card-body text-center py-16">
+                <p className="text-xl opacity-75">
+                  No photos yet. Check back soon!
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {gallery.map((photo) => (
-                <div
+                <article
                   key={photo.id}
-                  className="card border border-base-300 overflow-hidden hover:shadow-xl transition-all cursor-pointer transform hover:scale-105"
+                  className="card card-xl border border-base-300 p-0 overflow-hidden flex flex-col shadow-sm transition group hover:shadow-lg cursor-pointer"
                   onClick={() => setSelectedPhoto(photo)}
                 >
-                  {photo.imageUrl && (
-                    <figure className="h-48 overflow-hidden bg-base-300">
-                      <img
-                        src={photo.imageUrl}
-                        alt={photo.title || "Gallery photo"}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                      />
-                    </figure>
-                  )}
-                  {photo.title && (
-                    <div className="card-body p-3">
-                      <p className="text-sm font-semibold line-clamp-1">{photo.title}</p>
+                  <div className="relative w-full h-64 bg-base-300">
+                    <Image
+                      src={photo.imageUrl}
+                      alt={photo.title}
+                      fill
+                      className="object-cover w-full h-full transition group-hover:scale-105"
+                      style={{ objectFit: "cover" }}
+                    />
+                    <div className="absolute bottom-0 left-0 w-full bg-black/40 text-white p-4 text-lg font-mono">
+                      {photo.title}
                     </div>
-                  )}
-                </div>
+                  </div>
+                </article>
               ))}
             </div>
+          )}
 
-            {/* Photo Modal */}
-            {selectedPhoto && (
-              <div className="modal modal-open">
-                <div className="modal-box w-11/12 max-w-4xl">
-                  {selectedPhoto.imageUrl && (
-                    <figure className="mb-4">
-                      <img
-                        src={selectedPhoto.imageUrl}
-                        alt={selectedPhoto.title}
-                        className="w-full rounded-lg"
-                      />
-                    </figure>
-                  )}
-                  {selectedPhoto.title && (
-                    <h3 className="font-bold text-2xl mb-2">{selectedPhoto.title}</h3>
-                  )}
-                  {selectedPhoto.description && (
-                    <p className="opacity-75">{selectedPhoto.description}</p>
-                  )}
-                  <div className="modal-action">
-                    <button
-                      className="btn"
-                      onClick={() => setSelectedPhoto(null)}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-                <div
-                  className="modal-backdrop"
+          {/* Image Preview Modal */}
+          {selectedPhoto && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+              <div className="bg-base-100 rounded-xl p-4 md:p-8 max-w-3xl w-full shadow-xl relative flex flex-col items-center">
+                <button
+                  className="absolute top-4 right-4 text-xl btn btn-sm btn-circle"
                   onClick={() => setSelectedPhoto(null)}
-                ></div>
+                >
+                  ✕
+                </button>
+
+                <div className="relative w-full h-[50vh] max-h-[70vh] flex items-center justify-center">
+                  <Image
+                    src={selectedPhoto.imageUrl}
+                    alt={selectedPhoto.title}
+                    fill
+                    className="object-contain rounded max-h-full"
+                    style={{ objectFit: "contain" }}
+                  />
+                </div>
+
+                <h3 className="font-bold text-2xl mt-6 text-center">
+                  {selectedPhoto.title}
+                </h3>
               </div>
-            )}
-          </>
-        )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </MainLayout>
   );
 }

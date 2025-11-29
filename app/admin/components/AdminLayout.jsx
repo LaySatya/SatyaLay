@@ -23,7 +23,9 @@ import {
   ArrowDownCircleIcon,
   CurrencyDollarIcon,
   TrophyIcon,
+  StarIcon,
 } from "@heroicons/react/24/outline";
+import { PlayIcon } from "@heroicons/react/24/solid";
 
 const sidebarItems = [
   {
@@ -77,6 +79,10 @@ const sidebarItems = [
     href: "/admin/contact",
     icon: <PhoneIcon className="h-6 w-6" />,
   },
+  {
+    name: "Gallery",
+    href: "/admin/gallery",
+    icon: <StarIcon className="h-6 w-6" />,},
   {
     name: "Settings",
     href: "/admin/settings",
