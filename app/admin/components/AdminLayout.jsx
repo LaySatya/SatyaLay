@@ -22,6 +22,7 @@ import {
   PhoneIcon,
   ArrowDownCircleIcon,
   CurrencyDollarIcon,
+  TrophyIcon,
 } from "@heroicons/react/24/outline";
 
 const sidebarItems = [
@@ -60,6 +61,11 @@ const sidebarItems = [
     name: "Skills",
     href: "/admin/skills",
     icon: <CodeBracketIcon className="h-6 w-6" />,
+  },
+  {
+    name: "Achievement",
+    href: "/admin/achievements",
+    icon: <TrophyIcon className="h-6 w-6" />,
   },
   {
     name: "Finance",
