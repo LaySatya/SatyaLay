@@ -34,7 +34,7 @@ export default function AdminContactPage() {
 			async function fetchMessages() {
 				setLoading(true);
 				try {
-					const q = query(collection(db, "contactMessages"), orderBy("createdAt", "desc"));
+					const q = query(collection(db, "contacts"), orderBy("createdAt", "desc"));
 					const snap = await getDocs(q);
 					const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 					setMessages(list);
@@ -54,7 +54,7 @@ export default function AdminContactPage() {
 			setSuccess("");
 			setError("");
 			try {
-				await addDoc(collection(db, "contactMessages"), {
+				await addDoc(collection(db, "contacts"), {
 					name,
 					email,
 					subject,
