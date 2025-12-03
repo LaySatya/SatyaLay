@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import { db } from "@/app/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import MainLayout from "../components/MainLayout";
-import PageHeader from "../components/PageHeader";
 import { NewspaperIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 

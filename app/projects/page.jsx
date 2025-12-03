@@ -5,7 +5,6 @@ import { db } from "@/app/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { BriefcaseIcon, ChevronDoubleRightIcon, WalletIcon } from "@heroicons/react/24/outline";
 import MainLayout from "../components/MainLayout";
-import PageHeader from "../components/PageHeader";
 import Image from "next/image";
 import { ServerStackIcon } from "@heroicons/react/24/outline";
 
