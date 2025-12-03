@@ -29,17 +29,20 @@ export default function Gallery() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen py-8 px-4">
+      <div className="min-h-screen py-4 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4 flex items-center gap-3">
-              <PhotoIcon className="h-10 w-10 text-amber-500" />
-              Gallery
-            </h1>
-            <div className="h-1 w-20 bg-cyan-500 rounded-full"></div>
-            <p className="text-lg opacity-75 mt-2">
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold mb-2 flex gap-4">
+                <PhotoIcon className="w-10 h-10 text-cyan-500" />
+                Project
+              </h1>
+              <hr className="border-t border-2  border-cyan-500 grow w-10" />
+              <p className="text-lg opacity-75 mt-4">
               A collection of memorable moments and events.
             </p>
+            </div>
+           
           </div>
 
           {loading ? (

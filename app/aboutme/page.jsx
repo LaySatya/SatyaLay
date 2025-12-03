@@ -36,7 +36,7 @@ export default function AboutMe() {
         console.error("Error fetching data:", error);
       } finally {
         // delay for 1 second
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        //await new Promise((resolve) => setTimeout(resolve, 1000));
         setLoading(false);
       }
     };
@@ -61,10 +61,16 @@ export default function AboutMe() {
           {/* About Me Section */}
           {aboutMe && (
             <div className="mb-12">
-              <h1 className="text-4xl font-bold mb-8 flex gap-4">
-                <UsersIcon className="w-10 h-10" />
+              <div className="mb-8">
+              <h1 className="text-4xl font-bold mb-2 flex gap-4">
+                <UsersIcon className="w-10 h-10 text-cyan-500" />
                 About
               </h1>
+              <hr className="border-t border-2  border-cyan-500 grow w-10" />
+              <p className="text-lg opacity-75 mt-4">
+              Get to know more about me, my background, and what drives me.
+            </p>
+            </div>
               <div className="card mb-12">
                 <div className="flex flex-col md:flex-row gap-8">
                   {aboutMe.imageUrl && (

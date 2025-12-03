@@ -69,10 +69,16 @@ export default function Birthday() {
   return (
     <MainLayout>
       <div className="max-w-6xl mx-auto py-4">
-        <h1 className="text-4xl font-bold mb-8 flex gap-4">
-          <CakeIcon className="w-10 h-10" />
-          Birthday 
-        </h1>
+         <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 flex gap-4">
+            <CakeIcon className="w-10 h-10 text-cyan-500" />
+            Birthday Countdown
+          </h1>
+          <hr className="border-t border-2  border-cyan-500 grow w-10" />
+           <p className="text-lg opacity-75 mt-4">
+          Countdown to my birthday and a special way to celebrate!
+            </p>
+        </div>
 
         <div className="card border border-cyan-500 shadow-sm p-8 flex flex-col items-center">
           <h2 className="text-3xl font-bold mb-6 text-cyan-500">My Birthday</h2>

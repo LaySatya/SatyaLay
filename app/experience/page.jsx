@@ -41,10 +41,17 @@ export default function ExperiencePage() {
 
   return (
     <MainLayout>
-      <div className="max-w-6xl mx-auto py-12 md:px-4">
-        <h1 className="text-4xl font-bold mb-8 flex gap-4">
-          <BuildingOfficeIcon className="w-10 h-10" /> Experience
-        </h1>
+      <div className="max-w-6xl mx-auto py-4 md:px-4">
+         <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 flex gap-4">
+            <BuildingOfficeIcon className="w-10 h-10 text-cyan-500" />
+            Experiences
+          </h1>
+          <hr className="border-t border-2  border-cyan-500 grow w-10" />
+          <p className="text-lg opacity-75 mt-4">
+            A timeline of my professional journey and roles I`ve undertaken.
+            </p>
+        </div>
         <ul className="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">
           {experiences.map((exp, idx) => (
             <li key={exp.id || idx}>

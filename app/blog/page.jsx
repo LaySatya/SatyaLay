@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import { db } from "@/app/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import MainLayout from "../components/MainLayout";
+import PageHeader from "../components/PageHeader";
+import { NewspaperIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 
 
@@ -59,12 +61,15 @@ export default function BlogPage() {
       <div className="min-h-screen py-4">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-2xl md:text-5xl font-extrabold mb-4 flex items-center gap-3">
+            <h1 className="text-4xl font-bold mb-2 flex gap-4">
+              <NewspaperIcon className="w-10 h-10 text-cyan-500" />
               Blog
             </h1>
-            <p className="text-lg opacity-75 mt-2">Latest posts, tips, and stories from Satya Lay.</p>
+            <hr className="border-t border-2  border-cyan-500 grow w-10" />
+            <p className="text-lg opacity-75 mt-4">
+              Insights, stories, and updates from my journey.
+            </p>
           </div>
-
           {posts.length === 0 ? (
             <div className="card border border-base-300">
               <div className="card-body text-center py-16">

@@ -16,8 +16,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import { de } from "date-fns/locale";
-import { HandThumbUpIcon } from "@heroicons/react/20/solid";
-import { HomeIcon } from "@heroicons/react/24/solid";
+import { ServerStackIcon, HomeIcon } from "@heroicons/react/24/outline";
+
 
 function MainLayout({ children }) {
   const pathname = usePathname();
@@ -56,11 +56,13 @@ function MainLayout({ children }) {
   };
 
   const navLinks = [
-    { href: "/welcome", label: "Welcome", icon: HomeIcon },
+    { href: "/", label: "Welcome", icon: HomeIcon },
     { href: "/aboutme", label: "About", icon: UsersIcon },
     { href: "/skills", label: "Skills", icon: SparklesIcon },
     { href: "/experience", label: "Experience", icon: CalendarIcon },
     { href: "/education", label: "Education", icon: AcademicCapIcon },
+    //project
+      { href: "/projects", label: "Projects", icon: ServerStackIcon },
     { href: "/achievements", label: "Achievements", icon: TrophyIcon },
     { href: "/blog", label: "Blog", icon: NewspaperIcon },
     { href: "/gallery", label: "Gallery", icon: PhotoIcon },

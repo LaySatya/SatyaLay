@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import MainLayout from "../components/MainLayout";
+import PageHeader from "../components/PageHeader";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { db } from "../lib/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
@@ -26,7 +27,8 @@ export default function ContactPage() {
       });
       setStatus("Thank you for contacting me!");
       setForm({ name: "", email: "", message: "" });
-    } catch (err) {
+    } catch (error) {
+      console.error("Contact form submit error:", error);
       setStatus("Failed to send. Please try again.");
     }
   };
@@ -36,18 +38,16 @@ export default function ContactPage() {
       <div className="min-h-screen py-4 px-4">
         <div className="max-w-6xl mx-auto">
 
-          {/* Title Section (same as Gallery) */}
-          <div className="mb-4">
-            <h1 className="text-4xl md:text-5xl font-extrabold flex gap-4 mb-4">
-              <EnvelopeIcon className="h-10 w-10 text-cyan-500 " />
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-2 flex gap-4">
+              <EnvelopeIcon className="w-10 h-10 text-cyan-500" />
               Contact Me
             </h1>
-            <div className="h-1 w-20 bg-amber-500 rounded-full"></div>
-            <p className="text-lg opacity-75 mt-3">
-              Feel free to reach out anytime. I’ll reply as soon as I can.
+            <hr className="border-t border-2  border-cyan-500 grow w-10" />
+            <p className="text-lg opacity-75 mt-4">
+              Feel free to reach out to me using the form below. I look forward to hearing from you!
             </p>
           </div>
-
           {/* Form Card */}
           <div className="rounded-xl">
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -90,7 +90,7 @@ export default function ContactPage() {
                 ></textarea>
               </div>
 
-              <button type="submit" className="btn bg-cyan-500 w-full text-md">
+              <button type="submit" className="btn bg-cyan-500 text-white w-full text-md">
                 Send Message
               </button>
 

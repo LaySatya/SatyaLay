@@ -69,7 +69,16 @@ export default function SkillsPage() {
   return (
     <MainLayout>
       <div className="max-w-6xl mx-auto py-4 md:px-4">
-        <h1 className="text-4xl font-bold mb-8 flex gap-4"><CodeBracketIcon className="w-10 h-10"/>Skills</h1>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 flex gap-4">
+            <CodeBracketIcon className="w-10 h-10 text-cyan-500" />
+            Skills
+          </h1>
+          <hr className="border-t border-2  border-cyan-500 grow w-10" />
+          <p className="text-lg opacity-75 mt-4">
+            A comprehensive overview of my technical skills and proficiencies.
+          </p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {Object.keys(grouped).map((cat) => (
             <div key={cat} className="rounded-xl border border-base-300 md:p-8 p-4">

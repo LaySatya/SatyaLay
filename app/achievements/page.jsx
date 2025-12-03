@@ -5,6 +5,7 @@ import { db } from "@/app/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { TrophyIcon } from "@heroicons/react/24/outline";
 import MainLayout from "../components/MainLayout";
+import PageHeader from "../components/PageHeader";
 import Image from "next/image";
 
 function Pill({ children }) {
@@ -65,13 +66,16 @@ export default function Achievements() {
     <MainLayout>
       <div className="min-h-screen py-4">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-2xl md:text-5xl font-extrabold mb-4 flex items-center gap-3">
-              <TrophyIcon className="h-10 w-10 text-amber-400" />
-              Achievements
-            </h1>
-            <p className="text-lg opacity-75 mt-2">Selected awards, certifications and milestones that demonstrate impact.</p>
-          </div>
+ <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 flex gap-4">
+            <TrophyIcon className="w-10 h-10 text-cyan-500" />
+            Achievements
+          </h1>
+          <hr className="border-t border-2  border-cyan-500 grow w-10" />
+           <p className="text-lg opacity-75 mt-4">
+            A showcase of my accomplishments and recognitions.
+            </p>
+        </div>
 
           {/* filters */}
           <div className="flex items-center gap-3 mb-6 flex-wrap">
