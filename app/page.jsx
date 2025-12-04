@@ -2,8 +2,10 @@
 
 import MainLayout from "./components/MainLayout";
 import { ArrowTopRightOnSquareIcon, SparklesIcon, UserIcon } from "@heroicons/react/24/outline";
+import { useTranslations } from 'next-intl';
 
 export default function Home() {
+  const t = useTranslations();
   return (
     <MainLayout>
       <div className="mx-auto">
@@ -15,20 +17,21 @@ export default function Home() {
 
               {/* Welcome Title */}
               <h1 className="text-5xl font-bold mb-4">
-                Welcome to{" "}
-                <span className="text-cyan-500">SATYA Portfolio</span>
+                <span className="block bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Hello,</span>
+                <span className="block">{t('welcomePage.welcome')}</span>
               </h1>
 
               {/* Rotating Text */}
               <div className="mt-6">
                 <span className="text-rotate text-4xl md:text-6xl leading-[2] font-bold text-cyan-500">
                   <span className="justify-items-center">
+
                     <span>📐 DESIGN</span>
                     <span>⌨️ DEVELOP</span>
                     <span>🌎 DEPLOY</span>
                     <span>🌱 SCALE</span>
                     <span>🔧 MAINTAIN</span>
-                    <span>♻️ REPEAT</span>
+                    <span>♻️ REPEAT</span> 
                   </span>
                 </span>
               </div>
@@ -49,6 +52,7 @@ export default function Home() {
                   View Projects
                 </a>
               </div>
+
             </div>
           </div>
         </div>
