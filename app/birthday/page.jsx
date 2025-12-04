@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CalendarIcon, CakeIcon, QrCodeIcon } from "@heroicons/react/24/outline";
+import {
+  CalendarIcon,
+  CakeIcon,
+  QrCodeIcon,
+} from "@heroicons/react/24/outline";
 import MainLayout from "../components/MainLayout";
 import Image from "next/image";
 
-const IMAGE_URL = "/home/birthday.jpg"; // Use correct public path
+const USD_QR = "/home/dollar_qr.png";
+const KHR_QR = "/home/riel_qr.png";
 
 // Calculate countdown based on a target date
 function getCountdown(targetDate) {
@@ -49,6 +54,7 @@ function getNextBirthday(month, day) {
 
 export default function Birthday() {
   const [showImage, setShowImage] = useState(false);
+  const [showUsd, setShowUsd] = useState(true);
 
   // Static birthday (month, day)
   const month = 10; // October
@@ -69,23 +75,23 @@ export default function Birthday() {
   return (
     <MainLayout>
       <div className="max-w-6xl mx-auto py-4">
-         <div className="mb-8">
+        <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 flex gap-4">
             <CakeIcon className="w-10 h-10 text-cyan-500" />
             Birthday Countdown
           </h1>
-          <hr className="border-t border-2  border-cyan-500 grow w-10" />
-           <p className="text-lg opacity-75 mt-4">
-          Countdown to my birthday and a special way to celebrate!
-            </p>
+          <hr className="border-t border-2  border-cyan-500 grow w-10 md:translate-0 -translate-y-10" />
+          <p className="text-lg opacity-75 mt-4">
+            Countdown to my birthday and a special way to celebrate!
+          </p>
         </div>
 
-        <div className="card border border-cyan-500 shadow-sm p-8 flex flex-col items-center">
-          <h2 className="text-3xl font-bold mb-6 text-cyan-500">My Birthday</h2>
+        <div className="card p-8 flex flex-col items-center">
+          {/* <h2 className="text-3xl font-bold mb-6 text-cyan-500">My Birthday</h2> */}
 
-          <div className="flex gap-5 mb-6">
+          <div className="flex md:gap-12 gap-4 mb-6">
             <div>
-              <span className="countdown font-mono text-5xl">
+              <span className="countdown font-mono md:text-8xl text-6xl">
                 <span style={{ "--value": countdown.days }}>
                   {countdown.days}
                 </span>
@@ -94,7 +100,7 @@ export default function Birthday() {
             </div>
 
             <div>
-              <span className="countdown font-mono text-5xl">
+              <span className="countdown font-mono md:text-8xl text-6xl">
                 <span style={{ "--value": countdown.hours }}>
                   {countdown.hours}
                 </span>
@@ -103,21 +109,21 @@ export default function Birthday() {
             </div>
 
             <div>
-              <span className="countdown font-mono text-5xl">
+              <span className="countdown font-mono md:text-8xl text-6xl">
                 <span style={{ "--value": countdown.minutes }}>
                   {countdown.minutes}
                 </span>
               </span>
-              <div className="text-sm mt-2">min</div>
+              <div className="text-sm mt-2">minutes</div>
             </div>
 
             <div>
-              <span className="countdown font-mono text-5xl">
+              <span className="countdown font-mono md:text-8xl text-6xl">
                 <span style={{ "--value": countdown.seconds }}>
                   {countdown.seconds}
                 </span>
               </span>
-              <div className="text-sm mt-2">sec</div>
+              <div className="text-sm mt-2">seconds</div>
             </div>
           </div>
 
@@ -129,29 +135,56 @@ export default function Birthday() {
           </button>
         </div>
 
-        {showImage && (
-          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-base-100 rounded-xl p-8 shadow-xl relative">
-              <button
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-                onClick={() => setShowImage(false)}
-              >
-                ✕
-              </button>
+       {showImage && (
+  <dialog open className="modal">
+    <div className="modal-box relative">
 
-              <h2 className="text-xl font-bold mb-4 text-center">Pay me coffee!</h2>
+      {/* CLOSE BUTTON */}
+      <button
+        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+        onClick={() => setShowImage(false)}
+      >
+        ✕
+      </button>
 
-              <div className="h-64 w-64 relative">
-                <Image
-                  src={IMAGE_URL}
-                  alt="Birthday"
-                  fill
-                  className="object-cover rounded-xl"
-                />
-              </div>
-            </div>
-          </div>
-        )}
+      {/* TITLE */}
+      <h2 className="text-xl font-bold mb-4 text-center">Pay me coffee!</h2>
+
+      {/* TOGGLE BUTTONS */}
+      <div className="flex justify-center gap-3 mb-4">
+        <button
+          className={`btn ${showUsd ? 'btn-active bg-cyan-500 text-white' : ''}`}
+          onClick={() => setShowUsd(true)}
+        >
+          Dollar (USD)
+        </button>
+
+        <button
+          className={`btn ${!showUsd ? 'btn-active bg-cyan-500 text-white' : ''}`}
+          onClick={() => setShowUsd(false)}
+        >
+          Riel (KHR)
+        </button>
+      </div>
+
+      {/* QR IMAGE */}
+      <div className="h-72 w-72 relative mx-auto">
+        <Image
+          src={showUsd ? USD_QR : KHR_QR}
+          alt="QR Code"
+          fill
+          className="object-cover rounded-xl"
+        />
+      </div>
+    </div>
+
+    {/* BACKDROP CLICK TO CLOSE */}
+    <form method="dialog" className="modal-backdrop">
+      <button onClick={() => setShowImage(false)}>close</button>
+    </form>
+  </dialog>
+)}
+
       </div>
     </MainLayout>
   );

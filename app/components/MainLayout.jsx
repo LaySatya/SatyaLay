@@ -15,9 +15,9 @@ import {
   EnvelopeIcon,
 } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
-import { de } from "date-fns/locale";
 import { ServerStackIcon, HomeIcon } from "@heroicons/react/24/outline";
 
+import LanguageSwitcher from "./LanguageSwitcher";
 
 function MainLayout({ children }) {
   const pathname = usePathname();
@@ -143,6 +143,7 @@ function MainLayout({ children }) {
                 </Link>
               </div>
               <div className="navbar-end">
+                 <LanguageSwitcher />
                 {mounted && (
                   <button
                     className="btn btn-ghost btn-circle"
@@ -169,7 +170,9 @@ function MainLayout({ children }) {
                       </svg>
                     )}
                   </button>
+                  
                 )}
+               
               </div>
             </div>
 

@@ -1,25 +1,18 @@
 "use client";
 
-//import { useEffect, useState } from "react";
-//import MainLayout from "../../components/MainLayout";
-//import { HeartIcon as HeartOutline, ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
-//import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
-//import MainLayout from "../components/MainLayout";
-
-
-
-
 import { useEffect, useState } from "react";
 import { db } from "@/app/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import MainLayout from "../components/MainLayout";
 import { NewspaperIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-
-
+import ClientLoading from "../components/ClientLoading";
+// Small pill component
 function Pill({ children }) {
   return (
-    <span className="px-3 py-1 rounded-full bg-base-200 text-sm font-semibold">{children}</span>
+    <span className="px-3 py-1 rounded-full bg-base-200 text-sm font-semibold">
+      {children}
+    </span>
   );
 }
 
@@ -28,47 +21,56 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
 
+  // Fetch blog posts
   useEffect(() => {
     let mounted = true;
+
     const fetchPosts = async () => {
       try {
         const snap = await getDocs(collection(db, "blogPosts"));
-        const data = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const data = snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         if (mounted) setPosts(data);
-      } catch (error) {
-        console.error("Error fetching blog posts:", error);
+      } catch (err) {
+        console.error("Error fetching blog posts:", err);
       } finally {
         if (mounted) setLoading(false);
       }
     };
+
     fetchPosts();
     return () => (mounted = false);
   }, []);
 
+  // Loading indicator
   if (loading) {
     return (
       <MainLayout>
-        <div className="min-h-screen flex items-center justify-center">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
+        <ClientLoading/>
       </MainLayout>
     );
   }
 
   return (
     <MainLayout>
-      <div className="min-h-screen py-4">
+      <div className="min-h-screen py-10 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-2 flex gap-4">
+
+          {/* Header */}
+          <div className="mb-10">
+            <h1 className="text-4xl font-bold mb-2 flex items-center gap-4">
               <NewspaperIcon className="w-10 h-10 text-cyan-500" />
               Blog
             </h1>
-            <hr className="border-t border-2  border-cyan-500 grow w-10" />
+            <hr className="border-t-2 border-cyan-500 w-20" />
             <p className="text-lg opacity-75 mt-4">
               Insights, stories, and updates from my journey.
             </p>
           </div>
+
+          {/* No posts */}
           {posts.length === 0 ? (
             <div className="card border border-base-300">
               <div className="card-body text-center py-16">
@@ -76,36 +78,56 @@ export default function BlogPage() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            // Modern Cards Grid
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post) => (
                 <article
                   key={post.id}
-                  className="card card-xl border border-base-300 p-4 flex flex-col gap-4 transition"
+                  onClick={() => setSelected(post)}
+                  className="group cursor-pointer rounded-xl bg-base-100/70 backdrop-blur border border-base-200 shadow-sm hover:shadow-xl transition duration-300 overflow-hidden"
                 >
-                  <div className="flex items-center gap-4">
-                    {post.imageUrl && /^https?:\/\//.test(post.imageUrl) ? (
-                      <div className="h-12 w-12 flex items-center justify-center">
-                        <Image src={post.imageUrl} alt={post.title} width={48} height={48} className="object-contain rounded" />
-                      </div>
+                  {/* Image section */}
+                  <div className="relative h-48 w-full overflow-hidden">
+                    {post.imageUrl ? (
+                      <Image
+                        src={post.imageUrl}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition duration-500"
+                      />
                     ) : (
-                      <div className="h-12 w-12 rounded bg-base-200 flex items-center justify-center">📝</div>
+                      <div className="h-full w-full bg-base-200 flex items-center justify-center text-4xl">
+                        📝
+                      </div>
                     )}
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold">{post.title}</h3>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Pill>{post.category || "General"}</Pill>
-                        <span className="text-sm opacity-70">{post.date}</span>
-                      </div>
-                      <p className="mt-2 text-sm opacity-80 line-clamp-3">{post.excerpt || post.content}</p>
-                      <div className="mt-3 flex items-center gap-3">
-                        {post.author && <span className="text-xs opacity-60">By <strong>{post.author}</strong></span>}
-                        <div className="ml-auto flex items-center gap-2">
-                          <button onClick={() => setSelected(post)} className="btn btn-ghost btn-sm">Read</button>
-                          {post.imageUrl && (
-                            <button onClick={() => setSelected(post)} className="btn btn-sm">Preview</button>
-                          )}
-                        </div>
-                      </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-5">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-100 text-cyan-700 dark:bg-cyan-900 dark:text-cyan-300">
+                        {post.category || "General"}
+                      </span>
+                      <span className="text-xs opacity-70">{post.date}</span>
+                    </div>
+
+                    <h3 className="text-lg font-semibold group-hover:text-cyan-500 transition duration-300">
+                      {post.title}
+                    </h3>
+
+                    <p className="mt-2 text-sm opacity-80 line-clamp-3">
+                      {post.excerpt || post.content}
+                    </p>
+
+                    <div className="flex items-center justify-between mt-4">
+                      {post.author && (
+                        <span className="text-xs opacity-70">
+                          By <strong>{post.author}</strong>
+                        </span>
+                      )}
+                      <button className="btn btn-sm btn-outline">
+                        Read More
+                      </button>
                     </div>
                   </div>
                 </article>
@@ -113,40 +135,66 @@ export default function BlogPage() {
             </div>
           )}
 
-          {/* Modal for selected blog detail */}
+          {/* ---- MODAL ---- */}
           {selected && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-              <div className="bg-base-100 rounded-xl p-8 max-w-5xl w-full shadow-xl relative lg:p-12">
-                <button className="absolute top-4 right-4 text-xl" onClick={() => setSelected(null)}>✕</button>
-                <div className="flex gap-6 items-start">
-                  <div className="w-1/3">
-                    {selected.imageUrl ? (
-                      <div className="relative h-48 w-full">
-                        <Image src={selected.imageUrl} alt={selected.title} fill className="object-contain rounded" />
-                      </div>
-                    ) : (
-                      <div className="h-48 w-full bg-base-200 rounded flex items-center justify-center">No image</div>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <h2 className="text-2xl font-bold mb-2">{selected.title}</h2>
-                    <p className="text-sm opacity-70 mb-2">{selected.date} • {selected.author}</p>
-                    <div className="mb-4">
-                      {selected.tags && Array.isArray(selected.tags) && (
-                        <div className="flex gap-2 flex-wrap mb-2">
-                          {selected.tags.map((tag) => (
-                            <span key={tag} className="px-2 py-0.5 rounded bg-base-200 text-xs font-semibold">{tag}</span>
-                          ))}
-                        </div>
-                      )}
+            <dialog open className="modal">
+              <div className="modal-box max-w-4xl p-0 overflow-hidden">
+
+                {/* IMAGE HEADER */}
+                <div className="relative h-64 w-full bg-base-200">
+                  {selected.imageUrl ? (
+                    <Image
+                      src={selected.imageUrl}
+                      alt={selected.title}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      No Image
                     </div>
-                    <div className="prose max-w-none">
-                      {selected.content || selected.excerpt}
+                  )}
+                </div>
+
+                {/* CONTENT */}
+                <div className="p-8 relative">
+                  <button
+                    className="btn btn-sm btn-circle btn-ghost absolute right-3 top-3"
+                    onClick={() => setSelected(null)}
+                  >
+                    ✕
+                  </button>
+
+                  <h2 className="text-3xl font-bold mb-2">{selected.title}</h2>
+                  <p className="opacity-70 text-sm mb-4">
+                    {selected.date} • {selected.author}
+                  </p>
+
+                  {/* Tags */}
+                  {selected.tags?.length > 0 && (
+                    <div className="flex gap-2 flex-wrap mb-4">
+                      {selected.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-3 py-1 rounded-full bg-base-200 text-xs font-semibold"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
                     </div>
-                  </div>
+                  )}
+
+                  {/* Full content */}
+                  <article className="prose prose-neutral max-w-none">
+                    {selected.content}
+                  </article>
                 </div>
               </div>
-            </div>
+
+              <form method="dialog" className="modal-backdrop">
+                <button onClick={() => setSelected(null)}>close</button>
+              </form>
+            </dialog>
           )}
         </div>
       </div>

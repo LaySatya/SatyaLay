@@ -1,15 +1,18 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     domains: [
       "img.icons8.com",
       "www.idg.edu.kh",
       "satyalay08.onrender.com",
-      "z-p3-scontent.fpnh5-4.fna.fbcdn.net"
+      "z-p3-scontent.fpnh5-4.fna.fbcdn.net",
+      "scontent.fpnh5-2.fna.fbcdn.net"
     ],
   },
-  /* config options here */
+  i18n: {
+    locales: ['en', 'kh'],
+    defaultLocale: 'en',
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

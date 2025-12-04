@@ -82,31 +82,40 @@ export default function Gallery() {
 
           {/* Image Preview Modal */}
           {selectedPhoto && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-              <div className="bg-base-100 rounded-xl p-4 md:p-8 max-w-3xl w-full shadow-xl relative flex flex-col items-center">
-                <button
-                  className="absolute top-4 right-4 text-xl btn btn-sm btn-circle"
-                  onClick={() => setSelectedPhoto(null)}
-                >
-                  ✕
-                </button>
+  <dialog open className="modal">
+    <div className="modal-box max-w-4xl relative">
 
-                <div className="relative w-full h-[50vh] max-h-[70vh] flex items-center justify-center">
-                  <Image
-                    src={selectedPhoto.imageUrl}
-                    alt={selectedPhoto.title}
-                    fill
-                    className="object-contain rounded max-h-full"
-                    style={{ objectFit: "contain" }}
-                  />
-                </div>
+      {/* Close Button */}
+      <button
+        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+        onClick={() => setSelectedPhoto(null)}
+      >
+        ✕
+      </button>
 
-                <h3 className="font-bold text-2xl mt-6 text-center">
-                  {selectedPhoto.title}
-                </h3>
-              </div>
-            </div>
-          )}
+      {/* Image Preview */}
+      <div className="relative w-full h-[50vh] flex items-center justify-center">
+        <Image
+          src={selectedPhoto.imageUrl}
+          alt={selectedPhoto.title}
+          fill
+          className="object-contain rounded-xl"
+        />
+      </div>
+
+      {/* Title */}
+      <h3 className="font-bold text-2xl mt-6 text-center">
+        {selectedPhoto.title}
+      </h3>
+    </div>
+
+    {/* Backdrop Click → Close */}
+    <form method="dialog" className="modal-backdrop">
+      <button onClick={() => setSelectedPhoto(null)}>close</button>
+    </form>
+  </dialog>
+)}
+
         </div>
       </div>
     </MainLayout>

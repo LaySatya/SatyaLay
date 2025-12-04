@@ -17,6 +17,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 import ClientLoading from "../components/ClientLoading";
+import { useTranslations } from "next-intl";
 
 export default function AboutMe() {
   const [aboutMe, setAboutMe] = useState(null);

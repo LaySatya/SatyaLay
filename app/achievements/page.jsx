@@ -9,7 +9,9 @@ import Image from "next/image";
 
 function Pill({ children }) {
   return (
-    <span className="px-3 py-1 rounded-full bg-base-200 text-sm font-semibold">{children}</span>
+    <span className="px-3 py-1 rounded-full bg-cyan-100 text-cyan-700 text-xs font-semibold">
+      {children}
+    </span>
   );
 }
 
@@ -17,24 +19,22 @@ export default function Achievements() {
   const [achievements, setAchievements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All");
-  const [selected, setSelected] = useState(null); // for modal
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    let mounted = true;
     const fetchAchievements = async () => {
       try {
         const achSnap = await getDocs(collection(db, "achievements"));
         const data = achSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        if (mounted) setAchievements(data);
+        setAchievements(data);
       } catch (error) {
         console.error("Error fetching achievements:", error);
       } finally {
-        if (mounted) setLoading(false);
+        setLoading(false);
       }
     };
 
     fetchAchievements();
-    return () => (mounted = false);
   }, []);
 
   const categories = useMemo(() => {
@@ -55,7 +55,7 @@ export default function Achievements() {
     return (
       <MainLayout>
         <div className="min-h-screen flex items-center justify-center">
-          <span className="loading loading-spinner loading-lg"></span>
+          <span className="loading loading-bars loading-lg"></span>
         </div>
       </MainLayout>
     );
@@ -63,110 +63,145 @@ export default function Achievements() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen py-4">
+      <div className="min-h-screen py-8 px-4">
         <div className="max-w-6xl mx-auto">
- <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 flex gap-4">
-            <TrophyIcon className="w-10 h-10 text-cyan-500" />
-            Achievements
-          </h1>
-          <hr className="border-t border-2  border-cyan-500 grow w-10" />
-           <p className="text-lg opacity-75 mt-4">
-            A showcase of my accomplishments and recognitions.
-            </p>
-        </div>
 
-          {/* filters */}
-          <div className="flex items-center gap-3 mb-6 flex-wrap">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
+              <TrophyIcon className="w-10 h-10 text-cyan-500" />
+              Achievements
+            </h1>
+            <hr className="border-t-2 border-cyan-500 w-10" />
+            <p className="text-lg opacity-70 mt-4">
+              A collection of my milestones, awards, and recognitions.
+            </p>
+          </div>
+
+          {/* Category Filter */}
+          <div className="flex flex-wrap items-center gap-3 mb-8">
             {Object.keys(categories).map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-3 py-1 rounded-full transition-colors font-semibold ${
-                  activeCategory === cat ? "bg-cyan-500 text-white" : "bg-base-200 text-base-content"
-                }`}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm border
+                  ${
+                    activeCategory === cat
+                      ? "bg-cyan-500 text-white border-cyan-500 shadow-md"
+                      : "bg-base-100 border-base-300 hover:bg-base-200"
+                  }
+                `}
               >
-                {cat} <span className="ml-2 text-sm opacity-70">{categories[cat]}</span>
+                {cat}{" "}
+                <span className="ml-2 opacity-70">({categories[cat]})</span>
               </button>
             ))}
           </div>
 
+          {/* Achievement Cards */}
           {filtered.length === 0 ? (
-            <div className="card border border-base-300">
-              <div className="card-body text-center py-16">
-                <p className="text-xl opacity-75">No achievements in this category.</p>
-              </div>
-            </div>
+            <div className="text-center py-20 opacity-70 text-xl">No achievements found.</div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((a) => (
                 <article
                   key={a.id}
-                  className="card card-xl border border-base-300 p-4 flex flex-col gap-4  transition"
+                  className="card border border-base-300 bg-base-100 shadow-sm hover:shadow-xl transition-all rounded-xl p-8 cursor-pointer"
+                  onClick={() => setSelected(a)}
                 >
-                  <div className="flex items-center gap-4">
-                    {a.imageUrl && /^https?:\/\//.test(a.imageUrl) ? (
-                      <div className="h-12 w-12 flex items-center justify-center">
-                        <Image src={a.imageUrl} alt={a.title} width={48} height={48} className="object-contain rounded" />
-                      </div>
-                    ) : (
-                      <div className="h-12 w-12 rounded bg-base-200 flex items-center justify-center">🏆</div>
+                  <div className="flex items-start gap-4">
+                    {a.imageUrl ? (
+                      <img
+                        src={a.imageUrl}
+                        alt={a.title}
+                        width={56}
+                        height={56}
+                        className="rounded-lg shadow object-cover"
+                      />
+                    ) 
+                    : (
+                      null
                     )}
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold">{a.title}</h3>
-                      <div className="flex items-center gap-2 mt-1">
+
+                    <div>
+                      <h3 className="text-lg font-semibold leading-tight">
+                        {a.title}
+                      </h3>
+                      <div className="flex items-center gap-2 mt-2">
                         <Pill>{a.category || "Other"}</Pill>
-                        <span className="text-sm opacity-70">{a.date}</span>
-                      </div>
-                      <p className="mt-2 text-sm opacity-80 line-clamp-3">{a.description}</p>
-                      <div className="mt-3 flex items-center gap-3">
-                        {a.issuer && <span className="text-xs opacity-60">By <strong>{a.issuer}</strong></span>}
-                        <div className="ml-auto flex items-center gap-2">
-                          {a.link && (
-                            <a href={a.link} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">
-                              View
-                            </a>
-                          )}
-                          {a.imageUrl && (
-                            <button onClick={() => setSelected(a)} className="btn btn-sm">
-                              Preview
-                            </button>
-                          )}
-                        </div>
+                        <span className="text-xs opacity-70">{a.date}</span>
                       </div>
                     </div>
+                  </div>
+
+                  <p className="text-sm opacity-70 mt-4 line-clamp-3">{a.description}</p>
+
+                  <div className="mt-4 flex justify-end">
+                    <button className="btn btn-sm btn-outline">View Details</button>
                   </div>
                 </article>
               ))}
             </div>
           )}
 
-          {/* Modal for selected achievement */}
+          {/* Modal */}
           {selected && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-              <div className="bg-base-100 rounded-xl p-6 max-w-3xl w-full shadow-xl relative">
-                <button className="absolute top-4 right-4 text-xl" onClick={() => setSelected(null)}>✕</button>
-                <div className="flex gap-6 items-start">
-                  <div className="w-1/3">
+            <dialog open className="modal modal-open">
+              <div className="modal-box max-w-3xl p-6 rounded-xl">
+                <form method="dialog">
+                  <button
+                    className="btn btn-sm btn-circle absolute right-4 top-4"
+                    onClick={() => setSelected(null)}
+                  >
+                    ✕
+                  </button>
+                </form>
+
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="md:w-1/3">
                     {selected.imageUrl ? (
                       <div className="relative h-48 w-full">
-                        <Image src={selected.imageUrl} alt={selected.title} fill className="object-contain rounded" />
+                        <img
+                          src={selected.imageUrl}
+                          alt={selected.title}
+                          fill
+                          className="object-contain rounded-lg"
+                        />
                       </div>
                     ) : (
-                      <div className="h-48 w-full bg-base-200 rounded flex items-center justify-center">No image</div>
+                      <div className="h-48 w-full bg-base-200 rounded-lg flex items-center justify-center">
+                        No image
+                      </div>
                     )}
                   </div>
+
                   <div className="flex-1">
-                    <h2 className="text-2xl font-bold">{selected.title}</h2>
-                    <p className="text-sm opacity-70 mt-1">{selected.date} • {selected.issuer}</p>
-                    <p className="mt-4">{selected.description}</p>
+                    <h2 className="text-3xl font-bold">{selected.title}</h2>
+                    <p className="text-sm opacity-70 mt-1">
+                      {selected.date} • {selected.issuer}
+                    </p>
+
+                    <p className="mt-4 leading-relaxed text-base">
+                      {selected.description}
+                    </p>
+
                     {selected.downloadUrl && (
-                      <a href={selected.downloadUrl} className="btn btn-primary mt-4" download>Download Certificate</a>
+                      <a
+                        href={selected.downloadUrl}
+                        className="btn btn-primary mt-6"
+                        download
+                      >
+                        Download Certificate
+                      </a>
                     )}
                   </div>
                 </div>
               </div>
-            </div>
+
+              <form method="dialog" className="modal-backdrop">
+                <button onClick={() => setSelected(null)}>close</button>
+              </form>
+            </dialog>
           )}
         </div>
       </div>
