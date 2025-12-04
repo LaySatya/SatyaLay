@@ -7,9 +7,9 @@ export default function NotFoundPage() {
   const searchParams = useSearchParams();
 
   return (
-    <div>
-      <h1>404 - Page Not Found</h1>
-      <p>Query param: {searchParams.get("example")}</p>
+    <div className="p-8 text-center">
+      <h1 className="text-3xl font-bold">404 - Page Not Found</h1>
+      <p>Query: {searchParams.get("example")}</p>
     </div>
   );
 }
