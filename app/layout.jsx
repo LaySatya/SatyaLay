@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Kantumruy_Pro } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
 import ClientIntlProvider from "./components/ClientIntlProvider";
@@ -6,6 +6,11 @@ import { LocaleProvider } from "./context/LocaleContext";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const kantumruyPro = Kantumruy_Pro({ 
+  variable: "--font-khmer",
+  subsets: ["khmer"],
+  weight: ["400", "500", "600", "700"]
+});
 
 export const metadata = {
   title: "SatyaLay",
@@ -17,7 +22,7 @@ export default function RootLayout({ children, params }) {
   
   return (
     <html lang={serverLocale} data-theme="light">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${kantumruyPro.variable} antialiased`}>
         <AuthProvider>
           <LocaleProvider locale={serverLocale}>
             <ClientIntlProvider locale={serverLocale}>

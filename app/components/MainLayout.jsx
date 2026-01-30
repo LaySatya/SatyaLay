@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useRef, useEffect, Suspense } from "react";
 import Link from "next/link";
@@ -18,6 +19,7 @@ import { ServerStackIcon, HomeIcon } from "@heroicons/react/24/outline";
 
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslations } from "next-intl";
+import { useLocale } from "../context/LocaleContext";
 
 function MainLayoutContent({ children }) {
   const t = useTranslations("nav");
@@ -26,6 +28,11 @@ function MainLayoutContent({ children }) {
   const [mounted, setMounted] = React.useState(false);
   const menuRefs = useRef({});
   const menuListRef = useRef(null);
+  const { locale } = useLocale();
+
+  // Determine if Khmer locale - apply Khmer font class
+  const isKhmer = locale === 'kh';
+  const fontClass = isKhmer ? 'font-khmer' : '';
 
   useEffect(() => {
     // Scroll the active menu item into view when pathname changes
@@ -72,7 +79,7 @@ function MainLayoutContent({ children }) {
 
   return (
     // 1. Outer wrapper: Full screen height, hidden overflow to prevent body scroll
-    <div className="p-4 md:p-8 h-screen w-full overflow-hidden">
+    <div className={`p-4 md:p-8 h-screen w-full overflow-hidden ${fontClass}`}>
       
       {/* 2. Mockup Window: set to h-full to fill the screen (minus padding) */}
       <div className="mockup-window  border border-base-300 h-full flex flex-col bg-base-100">
@@ -179,7 +186,7 @@ function MainLayoutContent({ children }) {
             {/* Horizontal Menu */}
             <div className="flex justify-center bg-base-200 dark:bg-base-300 border-b border-base-300 overflow-x-auto">
               <ul className="menu menu-horizontal gap-2 p-4 flex-nowrap" ref={menuListRef}>
-                {navLinks.map(({ href, key, icon: Icon }) => (
+{navLinks.map(({ href, key, icon: Icon }) => (
                   <li key={href} ref={el => { menuRefs.current[href] = el; }}>
                     <Link
                       href={href}
@@ -220,3 +227,4 @@ function MainLayout({ children }) {
 }
 
 export default MainLayout;
+

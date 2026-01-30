@@ -30,23 +30,38 @@
   },
   "experience": {
     "title": "Experience",
-    "subtitle": "My professional journey"
+    "subtitle": "My professional journey",
+    "present": "Present"
   },
   "education": {
     "title": "Education",
-    "subtitle": "My academic background"
+    "subtitle": "My academic background",
+    "present": "Present"
   },
   "projects": {
     "title": "Projects",
-    "subtitle": "Things I've built"
+    "subtitle": "Things I've built",
+    "all": "All",
+    "durationNA": "Duration: N/A",
+    "noImage": "No image",
+    "liveDemo": "Live Demo",
+    "githubRepo": "GitHub Repo"
   },
   "achievements": {
     "title": "Achievements",
-    "subtitle": "Milestones and accomplishments"
+    "subtitle": "Milestones and accomplishments",
+    "other": "Other",
+    "noAchievements": "No achievements found.",
+    "viewDetails": "View Details",
+    "noImage": "No image",
+    "downloadCertificate": "Download Certificate"
   },
   "blog": {
     "title": "Blog",
-    "subtitle": "Thoughts and tutorials"
+    "subtitle": "Thoughts and tutorials",
+    "general": "General",
+    "noImage": "No Image",
+    "byAuthor": "By"
   },
   "gallery": {
     "title": "Gallery",
@@ -54,15 +69,34 @@
   },
   "birthday": {
     "title": "Birthday",
-    "subtitle": "Celebrate with me!"
+    "subtitle": "Celebrate with me!",
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "seconds": "seconds",
+    "payCoffee": "Pay me coffee",
+    "dollarUSD": "Dollar (USD)",
+    "rielKHR": "Riel (KHR)"
   },
   "contact": {
     "title": "Contact",
-    "subtitle": "Get in touch"
+    "subtitle": "Get in touch",
+    "yourName": "Your Name",
+    "yourEmail": "Your Email",
+    "message": "Message",
+    "placeholderName": "John Doe",
+    "placeholderEmail": "john@example.com",
+    "placeholderMessage": "Write your message here...",
+    "sendMessage": "Send Message",
+    "sending": "Sending...",
+    "success": "Thank you for contacting me!",
+    "error": "Failed to send. Please try again."
   },
   "common": {
     "loading": "Loading...",
     "readMore": "Read More",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "close": "Close",
+    "noImage": "No image"
   }
 }
