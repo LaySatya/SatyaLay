@@ -6,6 +6,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { TrophyIcon } from "@heroicons/react/24/outline";
 import MainLayout from "../components/MainLayout";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 function Pill({ children }) {
   return (
@@ -16,6 +17,8 @@ function Pill({ children }) {
 }
 
 export default function Achievements() {
+  const t = useTranslations("achievements");
+  const tCommon = useTranslations("common");
   const [achievements, setAchievements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All");
@@ -70,11 +73,11 @@ export default function Achievements() {
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
               <TrophyIcon className="w-10 h-10 text-cyan-500" />
-              Achievements
+              {t('title')}
             </h1>
             <hr className="border-t-2 border-cyan-500 w-10" />
             <p className="text-lg opacity-70 mt-4">
-              A collection of my milestones, awards, and recognitions.
+              {t('subtitle')}
             </p>
           </div>
 

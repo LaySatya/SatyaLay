@@ -5,7 +5,9 @@ import { ArrowTopRightOnSquareIcon, SparklesIcon, UserIcon } from "@heroicons/re
 import { useTranslations } from 'next-intl';
 
 export default function Home() {
-  const t = useTranslations();
+  const t = useTranslations("home");
+  const tNav = useTranslations("nav");
+  
   return (
     <MainLayout>
       <div className="mx-auto">
@@ -17,39 +19,38 @@ export default function Home() {
 
               {/* Welcome Title */}
               <h1 className="text-5xl font-bold mb-4">
-                <span className="block bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Hello,</span>
-                <span className="block">{t('welcomePage.welcome')}</span>
+                <span className="block bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">{t('welcome')}</span>
+                <span className="block">{t('welcomeSubtitle')}</span>
               </h1>
 
               {/* Rotating Text */}
               <div className="mt-6">
                 <span className="text-rotate text-4xl md:text-6xl leading-[2] font-bold text-cyan-500">
                   <span className="justify-items-center">
-
-                    <span>📐 DESIGN</span>
-                    <span>⌨️ DEVELOP</span>
-                    <span>🌎 DEPLOY</span>
-                    <span>🌱 SCALE</span>
-                    <span>🔧 MAINTAIN</span>
-                    <span>♻️ REPEAT</span> 
+                    <span>📐 {t('tagline').split(',')[0]}</span>
+                    <span>⌨️ {t('tagline').split(',')[1]}</span>
+                    <span>🌎 {t('tagline').split(',')[2]}</span>
+                    <span>🌱 {t('tagline').split(',')[3]}</span>
+                    <span>🔧 {t('tagline').split(',')[4]}</span>
+                    <span>♻️ {t('tagline').split(',')[5]}</span> 
                   </span>
                 </span>
               </div>
 
               {/* Subtitle */}
               <p className="mt-6 text-base opacity-70 max-w-xl mx-auto">
-                Explore my journey, projects, experience, and everything I love building.
+                {t('description')}
               </p>
 
               {/* Buttons */}
               <div className="flex justify-center gap-3 mt-8">
                 <a href="/aboutme" className="btn btn-outline btn-info"> 
                 <UserIcon className="inline-block w-5 h-5" />
-                  Get to know me
+                  {t('aboutMe')}
                 </a>
                 <a href="/projects" className="btn btn-outline">
                   <ArrowTopRightOnSquareIcon className="inline-block w-5 h-5" />
-                  View Projects
+                  {t('viewProjects')}
                 </a>
               </div>
 

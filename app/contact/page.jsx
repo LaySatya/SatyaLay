@@ -5,8 +5,10 @@ import MainLayout from "../components/MainLayout";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { db } from "../lib/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { useTranslations } from 'next-intl';
 
 export default function ContactPage() {
+  const t = useTranslations("contact");
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState("");
 
@@ -42,11 +44,11 @@ export default function ContactPage() {
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2 flex gap-4">
               <EnvelopeIcon className="w-10 h-10 text-cyan-500" />
-              Contact Me
+              {t('title')}
             </h1>
             <hr className="border-t border-2  border-cyan-500 grow w-10" />
             <p className="text-lg opacity-75 mt-4">
-              Feel free to reach out to me using the form below. I look forward to hearing from you!
+              {t('subtitle')}
             </p>
           </div>
           {/* Form Card */}

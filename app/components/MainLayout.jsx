@@ -17,8 +17,10 @@ import { usePathname } from "next/navigation";
 import { ServerStackIcon, HomeIcon } from "@heroicons/react/24/outline";
 
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslations } from "next-intl";
 
 function MainLayoutContent({ children }) {
+  const t = useTranslations("nav");
   const pathname = usePathname();
   const [theme, setTheme] = React.useState("light");
   const [mounted, setMounted] = React.useState(false);
@@ -55,18 +57,17 @@ function MainLayoutContent({ children }) {
   };
 
   const navLinks = [
-    { href: "/", label: "Welcome", icon: HomeIcon },
-    { href: "/aboutme", label: "About", icon: UsersIcon },
-    { href: "/skills", label: "Skills", icon: SparklesIcon },
-    { href: "/experience", label: "Experience", icon: CalendarIcon },
-    { href: "/education", label: "Education", icon: AcademicCapIcon },
-    //project
-    { href: "/projects", label: "Projects", icon: ServerStackIcon },
-    { href: "/achievements", label: "Achievements", icon: TrophyIcon },
-    { href: "/blog", label: "Blog", icon: NewspaperIcon },
-    { href: "/gallery", label: "Gallery", icon: PhotoIcon },
-    { href: "/birthday", label: "Birthday", icon: CakeIcon },
-    { href: "/contact", label: "Contact", icon: EnvelopeIcon },
+    { href: "/", key: "welcome", icon: HomeIcon },
+    { href: "/aboutme", key: "about", icon: UsersIcon },
+    { href: "/skills", key: "skills", icon: SparklesIcon },
+    { href: "/experience", key: "experience", icon: CalendarIcon },
+    { href: "/education", key: "education", icon: AcademicCapIcon },
+    { href: "/projects", key: "projects", icon: ServerStackIcon },
+    { href: "/achievements", key: "achievements", icon: TrophyIcon },
+    { href: "/blog", key: "blog", icon: NewspaperIcon },
+    { href: "/gallery", key: "gallery", icon: PhotoIcon },
+    { href: "/birthday", key: "birthday", icon: CakeIcon },
+    { href: "/contact", key: "contact", icon: EnvelopeIcon },
   ];
 
   return (
@@ -118,7 +119,7 @@ function MainLayoutContent({ children }) {
                     tabIndex={0}
                     className="dropdown-content menu bg-base-100 rounded-box z-50 w-64 p-2 shadow"
                   >
-                    {navLinks.map(({ href, label, icon: Icon }) => (
+                    {navLinks.map(({ href, key, icon: Icon }) => (
                       <li key={href}>
                         <Link
                           href={href}
@@ -129,7 +130,7 @@ function MainLayoutContent({ children }) {
                           } transition-colors duration-150`}
                         >
                           <Icon className="h-5 w-5" />
-                          {label}
+                          {t(key)}
                         </Link>
                       </li>
                     ))}
@@ -178,7 +179,7 @@ function MainLayoutContent({ children }) {
             {/* Horizontal Menu */}
             <div className="flex justify-center bg-base-200 dark:bg-base-300 border-b border-base-300 overflow-x-auto">
               <ul className="menu menu-horizontal gap-2 p-4 flex-nowrap" ref={menuListRef}>
-                {navLinks.map(({ href, label, icon: Icon }) => (
+                {navLinks.map(({ href, key, icon: Icon }) => (
                   <li key={href} ref={el => { menuRefs.current[href] = el; }}>
                     <Link
                       href={href}
@@ -189,7 +190,7 @@ function MainLayoutContent({ children }) {
                       } transition-colors duration-150`}
                     >
                       <Icon className="h-5 w-5" />
-                      {label}
+                      {t(key)}
                     </Link>
                   </li>
                 ))}

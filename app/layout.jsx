@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
 import ClientIntlProvider from "./components/ClientIntlProvider";
+import { LocaleProvider } from "./context/LocaleContext";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -12,14 +13,17 @@ export const metadata = {
 };
 
 export default function RootLayout({ children, params }) {
-  const locale = params?.locale || 'en'; // App Router param if you use dynamic locale
+  const serverLocale = params?.locale || 'en';
+  
   return (
-    <html lang={locale} data-theme="light">
+    <html lang={serverLocale} data-theme="light">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
-          <ClientIntlProvider locale={locale}>
-            {children}
-          </ClientIntlProvider>
+          <LocaleProvider locale={serverLocale}>
+            <ClientIntlProvider locale={serverLocale}>
+              {children}
+            </ClientIntlProvider>
+          </LocaleProvider>
         </AuthProvider>
       </body>
     </html>

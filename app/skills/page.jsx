@@ -7,6 +7,7 @@ import MainLayout from "../components/MainLayout";
 import ClientLoading from "../components/ClientLoading";
 import Image from "next/image";
 import { CodeBracketIcon } from "@heroicons/react/24/outline";
+import { useTranslations } from 'next-intl';
 
 function SkillBar({ name, percent, imageUrl }) {
   return (
@@ -33,6 +34,8 @@ function SkillBar({ name, percent, imageUrl }) {
 }
 
 export default function SkillsPage() {
+  const t = useTranslations("skills");
+  const tCommon = useTranslations("common");
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -75,11 +78,11 @@ export default function SkillsPage() {
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 flex gap-4">
             <CodeBracketIcon className="w-10 h-10 text-cyan-500" />
-            Skills
+            {t('title')}
           </h1>
           <hr className="border-t border-2  border-cyan-500 grow w-10" />
           <p className="text-lg opacity-75 mt-4">
-            A comprehensive overview of my technical skills and proficiencies.
+            {t('subtitle')}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

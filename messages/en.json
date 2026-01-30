@@ -1,8 +1,68 @@
-
 {
-  "welcomePage": {
-      "welcome": "Welcome to Satya portfolio",
-        "rotatingTexts": "DESIGN, DEVELOP, DEPLOY, SCALE, MAINTAIN, REPEAT",
-      "description": "Explore my journey, projects, experience, and everything I love building."
+  "nav": {
+    "welcome": "Welcome",
+    "about": "About",
+    "skills": "Skills",
+    "experience": "Experience",
+    "education": "Education",
+    "projects": "Projects",
+    "achievements": "Achievements",
+    "blog": "Blog",
+    "gallery": "Gallery",
+    "birthday": "Birthday",
+    "contact": "Contact"
+  },
+  "home": {
+    "welcome": "Hello,",
+    "welcomeSubtitle": "Welcome to Satya's Portfolio",
+    "tagline": "DESIGN, DEVELOP, DEPLOY, SCALE, MAINTAIN, REPEAT",
+    "description": "Explore my journey, projects, experience, and everything I love building.",
+    "aboutMe": "Get to know me",
+    "viewProjects": "View Projects"
+  },
+  "aboutme": {
+    "title": "About Me",
+    "tagline": "Passionate about creating impactful digital experiences"
+  },
+  "skills": {
+    "title": "Skills",
+    "subtitle": "My technical expertise"
+  },
+  "experience": {
+    "title": "Experience",
+    "subtitle": "My professional journey"
+  },
+  "education": {
+    "title": "Education",
+    "subtitle": "My academic background"
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "Things I've built"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "subtitle": "Milestones and accomplishments"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Thoughts and tutorials"
+  },
+  "gallery": {
+    "title": "Gallery",
+    "subtitle": "Photo gallery"
+  },
+  "birthday": {
+    "title": "Birthday",
+    "subtitle": "Celebrate with me!"
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Get in touch"
+  },
+  "common": {
+    "loading": "Loading...",
+    "readMore": "Read More",
+    "viewDetails": "View Details"
   }
 }

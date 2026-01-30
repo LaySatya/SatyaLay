@@ -7,6 +7,7 @@ import MainLayout from "../components/MainLayout";
 import { NewspaperIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import ClientLoading from "../components/ClientLoading";
+import { useTranslations } from "next-intl";
 // Small pill component
 function Pill({ children }) {
   return (
@@ -17,6 +18,8 @@ function Pill({ children }) {
 }
 
 export default function BlogPage() {
+  const t = useTranslations("blog");
+  const tCommon = useTranslations("common");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
@@ -65,11 +68,11 @@ export default function BlogPage() {
           <div className="mb-10">
             <h1 className="text-4xl font-bold mb-2 flex items-center gap-4">
               <NewspaperIcon className="w-10 h-10 text-cyan-500" />
-              Blog
+              {t('title')}
             </h1>
             <hr className="border-t-2 border-cyan-500 w-20" />
             <p className="text-lg opacity-75 mt-4">
-              Insights, stories, and updates from my journey.
+              {t('subtitle')}
             </p>
           </div>
 
@@ -77,7 +80,7 @@ export default function BlogPage() {
           {posts.length === 0 ? (
             <div className="card border border-base-300">
               <div className="card-body text-center py-16">
-                <p className="text-xl opacity-75">No blog posts yet.</p>
+                <p className="text-xl opacity-75">{tCommon('loading')}</p>
               </div>
             </div>
           ) : (
@@ -129,7 +132,7 @@ export default function BlogPage() {
                         </span>
                       )}
                       <button className="btn btn-sm btn-outline">
-                        Read More
+                        {tCommon('readMore')}
                       </button>
                     </div>
                   </div>

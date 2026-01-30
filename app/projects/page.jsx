@@ -7,6 +7,7 @@ import MainLayout from "../components/MainLayout";
 import Image from "next/image";
 import { ServerStackIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import ClientLoading from "../components/ClientLoading";
+import { useTranslations } from "next-intl";
 
 // Format Firestore Timestamp safely
 function formatDate(date) {
@@ -24,6 +25,8 @@ function Pill({ children }) {
 }
 
 export default function ProjectsPage() {
+  const t = useTranslations("projects");
+  const tCommon = useTranslations("common");
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All");
@@ -82,11 +85,11 @@ export default function ProjectsPage() {
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2 flex gap-4 items-center">
               <ServerStackIcon className="w-10 h-10 text-cyan-500" />
-              Projects
+              {t('title')}
             </h1>
             <hr className="border-t border-2 border-cyan-500 w-16" />
             <p className="text-lg opacity-75 mt-4">
-              A collection of my professional and personal projects.
+              {t('subtitle')}
             </p>
           </div>
 
@@ -111,7 +114,7 @@ export default function ProjectsPage() {
           {filtered.length === 0 ? (
             <div className="card border border-base-300">
               <div className="card-body text-center py-16">
-                <p className="text-xl opacity-75">No projects found.</p>
+                <p className="text-xl opacity-75">{tCommon('loading')}</p>
               </div>
             </div>
           ) : (
@@ -157,7 +160,7 @@ export default function ProjectsPage() {
                     className="btn btn-sm bg-cyan-500 text-white absolute bottom-4 right-4 rounded-lg shadow
                                hover:bg-cyan-600 transition"
                   >
-                    Preview
+                    {tCommon('viewDetails')}
                   </button>
                 </article>
               ))}

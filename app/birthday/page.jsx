@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import MainLayout from "../components/MainLayout";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const USD_QR = "/home/dollar_qr.png";
 const KHR_QR = "/home/riel_qr.png";
@@ -53,6 +54,7 @@ function getNextBirthday(month, day) {
 }
 
 export default function Birthday() {
+  const t = useTranslations("birthday");
   const [showImage, setShowImage] = useState(false);
   const [showUsd, setShowUsd] = useState(true);
 
@@ -80,11 +82,11 @@ export default function Birthday() {
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 flex gap-4">
             <CakeIcon className="w-10 h-10 text-cyan-500" />
-            Birthday Countdown
+            {t('title')}
           </h1>
           <hr className="border-t border-2  border-cyan-500 grow w-10 md:translate-0 -translate-y-10" />
           <p className="text-lg opacity-75 mt-4">
-            Countdown to my birthday and a special way to celebrate!
+            {t('subtitle')}
           </p>
         </div>
 

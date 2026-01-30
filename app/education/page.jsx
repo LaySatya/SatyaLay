@@ -8,8 +8,10 @@ import ClientLoading from "../components/ClientLoading";
 import { AcademicCapIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { BookOpenIcon } from "@heroicons/react/24/outline";
+import { useTranslations } from "next-intl";
 
 export default function EducationPage() {
+  const t = useTranslations("education");
   const [educations, setEducations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [logoModal, setLogoModal] = useState({
@@ -53,11 +55,11 @@ export default function EducationPage() {
         <div className="mb-4">
           <h1 className="text-4xl font-bold mb-2 flex gap-4">
             <AcademicCapIcon className="w-10 h-10 text-cyan-500" />
-            Education
+            {t('title')}
           </h1>
           <hr className="border-t border-2  border-cyan-500 grow w-10" />
           <p className="text-lg opacity-75 mt-4">
-            A summary of my academic background and qualifications.
+            {t('subtitle')}
           </p>
         </div>
 

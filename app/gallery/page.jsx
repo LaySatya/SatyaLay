@@ -6,8 +6,11 @@ import { collection, getDocs } from "firebase/firestore";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import MainLayout from "../components/MainLayout";
+import { useTranslations } from 'next-intl';
 
 export default function Gallery() {
+  const t = useTranslations("gallery");
+  const tCommon = useTranslations("common");
   const [gallery, setGallery] = useState([]);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,23 +40,23 @@ export default function Gallery() {
             <div className="mb-8">
               <h1 className="text-4xl font-bold mb-2 flex gap-4">
                 <PhotoIcon className="w-10 h-10 text-cyan-500" />
-                Project
+                {t('title')}
               </h1>
               <hr className="border-t border-2  border-cyan-500 grow w-10" />
               <p className="text-lg opacity-75 mt-4">
-              A collection of memorable moments and events.
+              {t('subtitle')}
             </p>
             </div>
            
           </div>
 
           {loading ? (
-            <p className="text-center text-lg opacity-70">Loading...</p>
+            <p className="text-center text-lg opacity-70">{tCommon('loading')}</p>
           ) : gallery.length === 0 ? (
             <div className="card border border-base-300">
               <div className="card-body text-center py-16">
                 <p className="text-xl opacity-75">
-                  No photos yet. Check back soon!
+                  {tCommon('loading')}
                 </p>
               </div>
             </div>

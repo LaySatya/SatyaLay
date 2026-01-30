@@ -7,8 +7,10 @@ import MainLayout from "../components/MainLayout";
 import ClientLoading from "../components/ClientLoading";
 import { BuildingOfficeIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function ExperiencePage() {
+  const t = useTranslations("experience");
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
   const [logoModal, setLogoModal] = useState({ open: false, url: "", company: "" });
@@ -48,11 +50,11 @@ export default function ExperiencePage() {
          <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 flex gap-4">
             <BuildingOfficeIcon className="w-10 h-10 text-cyan-500" />
-            Experiences
+            {t('title')}
           </h1>
           <hr className="border-t border-2  border-cyan-500 grow w-10" />
           <p className="text-lg opacity-75 mt-4">
-            A timeline of my professional journey and roles I`ve undertaken.
+            {t('subtitle')}
             </p>
         </div>
         <ul className="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">

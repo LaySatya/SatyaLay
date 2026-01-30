@@ -20,6 +20,8 @@ import ClientLoading from "../components/ClientLoading";
 import { useTranslations } from "next-intl";
 
 export default function AboutMe() {
+  const t = useTranslations("aboutme");
+  const tCommon = useTranslations("common");
   const [aboutMe, setAboutMe] = useState(null);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -69,11 +71,11 @@ export default function AboutMe() {
               <div className="mb-8">
                 <h1 className="text-4xl font-bold mb-2 flex gap-4">
                   <UsersIcon className="w-10 h-10 text-cyan-500" />
-                  About
+                  {t('title')}
                 </h1>
                 <hr className="border-t border-2  border-cyan-500 grow w-10" />
                 <p className="text-lg opacity-75 mt-4">
-                  Get to know more about me, my background, and what drives me.
+                  {t('tagline')}
                 </p>
               </div>
               <div className="card mb-12">
@@ -180,10 +182,10 @@ export default function AboutMe() {
                           href={aboutMe.resumeUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="btn shadow-lg border border-cyan-400 text-cyan-500 font-semibold hover:bg-cyan-500/80 hover:text-white transition-all duration-100"
+                        className="btn shadow-lg border border-cyan-400 text-cyan-500 font-semibold hover:bg-cyan-500/80 hover:text-white transition-all duration-100"
                         >
                           <ArrowDownIcon className="h-6 w-6" />
-                          <span className="tracking-wide">Download CV</span>
+                          <span className="tracking-wide">{tCommon('readMore')}</span>
                         </a>
                       )}
                     </div>
