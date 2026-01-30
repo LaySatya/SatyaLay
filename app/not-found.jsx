@@ -1,15 +1,23 @@
-// _not-found/page.tsx
 "use client";
+import React, { Suspense } from "react";
+import Link from "next/link";
+import MainLayout from "./components/MainLayout";
 
-import { useSearchParams } from "next/navigation";
-
-export default function NotFoundPage() {
-  const searchParams = useSearchParams();
-
+export default function NotFound() {
   return (
-    <div className="p-8 text-center">
-      <h1 className="text-3xl font-bold">404 - Page Not Found</h1>
-      <p>Query: {searchParams.get("example")}</p>
-    </div>
+    <Suspense fallback={<div />}>
+      <MainLayout>
+        <div className="flex flex-col items-center justify-center h-full text-center">
+          <h1 className="text-6xl font-bold text-cyan-500 mb-4">404</h1>
+          <h2 className="text-2xl font-semibold mb-2">Page Not Found</h2>
+          <p className="mb-6 text-base-content opacity-70">
+            Sorry, the page you are looking for does not exist.
+          </p>
+          <Link href="/" className="btn btn-info text-white">
+            Go Home
+          </Link>
+        </div>
+      </MainLayout>
+    </Suspense>
   );
 }

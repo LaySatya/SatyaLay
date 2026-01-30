@@ -201,6 +201,7 @@ function MainLayout({ children }) {
           {/* --- SCROLLABLE CONTENT SECTION --- */}
           {/* flex-1 makes it fill remaining height, overflow-y-auto enables scroll here only */}
           <div className="flex-1 overflow-y-auto p-4 bg-base-100 relative">
+            
              {children}
           </div>
 

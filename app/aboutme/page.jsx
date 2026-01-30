@@ -56,6 +56,7 @@ export default function AboutMe() {
   }
 
   return (
+    
     <MainLayout>
       <div className="max-w-6xl mx-auto py-4 md:px-4">
         <div className="">
