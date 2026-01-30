@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import MainLayout from "../components/MainLayout";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { db } from "../lib/firebase";

@@ -1,7 +1,6 @@
 "use client";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, Suspense } from "react";
 import Link from "next/link";
-
 
 import {
   SparklesIcon,
@@ -19,7 +18,7 @@ import { ServerStackIcon, HomeIcon } from "@heroicons/react/24/outline";
 
 import LanguageSwitcher from "./LanguageSwitcher";
 
-function MainLayout({ children }) {
+function MainLayoutContent({ children }) {
   const pathname = usePathname();
   const [theme, setTheme] = React.useState("light");
   const [mounted, setMounted] = React.useState(false);
@@ -62,7 +61,7 @@ function MainLayout({ children }) {
     { href: "/experience", label: "Experience", icon: CalendarIcon },
     { href: "/education", label: "Education", icon: AcademicCapIcon },
     //project
-      { href: "/projects", label: "Projects", icon: ServerStackIcon },
+    { href: "/projects", label: "Projects", icon: ServerStackIcon },
     { href: "/achievements", label: "Achievements", icon: TrophyIcon },
     { href: "/blog", label: "Blog", icon: NewspaperIcon },
     { href: "/gallery", label: "Gallery", icon: PhotoIcon },
@@ -210,4 +209,13 @@ function MainLayout({ children }) {
     </div>
   );
 }
+
+function MainLayout({ children }) {
+  return (
+    <Suspense fallback={<div className="p-4 md:p-8 h-screen w-full overflow-hidden flex items-center justify-center">Loading...</div>}>
+      <MainLayoutContent>{children}</MainLayoutContent>
+    </Suspense>
+  );
+}
+
 export default MainLayout;

@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { db } from "@/app/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import MainLayout from "../components/MainLayout";
 import Image from "next/image";
 import { ServerStackIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import ClientLoading from "../components/ClientLoading";
 
 // Format Firestore Timestamp safely
 function formatDate(date) {
