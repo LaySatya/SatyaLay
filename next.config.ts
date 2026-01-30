@@ -7,7 +7,7 @@ const nextConfig = {
       "satyalay08.onrender.com",
       "z-p3-scontent.fpnh5-4.fna.fbcdn.net",
       "scontent.fpnh5-2.fna.fbcdn.net",
-      "https://drive.google.com"
+      "drive.google.com"
     ],
   },
   // i18n: {
