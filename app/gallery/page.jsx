@@ -29,6 +29,8 @@ export default function Gallery() {
 
   return (
     <MainLayout>
+      <Suspense>
+
       <div className="min-h-screen py-4 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
@@ -118,6 +120,7 @@ export default function Gallery() {
 
         </div>
       </div>
+      </Suspense>
     </MainLayout>
   );
 }

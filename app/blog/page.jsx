@@ -48,7 +48,14 @@ export default function BlogPage() {
   if (loading) {
     return (
       <MainLayout>
-        <ClientLoading/>
+        <Suspense>
+
+        <ClientLoading/>Stack(
+          children: [
+            
+          ]
+        )
+        </Suspense>
       </MainLayout>
     );
   }

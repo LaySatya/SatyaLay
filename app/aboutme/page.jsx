@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { db } from "@/app/lib/firebase";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
@@ -48,15 +48,18 @@ export default function AboutMe() {
   if (loading) {
     return (
       <MainLayout>
-        <div className="mt-5">
-          <ClientLoading />
-        </div>
+        <Suspense>
+          <div className="mt-5">
+
+            <ClientLoading />
+          </div>
+        </Suspense>
       </MainLayout>
     );
   }
 
   return (
-    
+
     <MainLayout>
       <div className="max-w-6xl mx-auto py-4 md:px-4">
         <div className="">
@@ -64,15 +67,15 @@ export default function AboutMe() {
           {aboutMe && (
             <div className="mb-12">
               <div className="mb-8">
-              <h1 className="text-4xl font-bold mb-2 flex gap-4">
-                <UsersIcon className="w-10 h-10 text-cyan-500" />
-                About
-              </h1>
-              <hr className="border-t border-2  border-cyan-500 grow w-10" />
-              <p className="text-lg opacity-75 mt-4">
-              Get to know more about me, my background, and what drives me.
-            </p>
-            </div>
+                <h1 className="text-4xl font-bold mb-2 flex gap-4">
+                  <UsersIcon className="w-10 h-10 text-cyan-500" />
+                  About
+                </h1>
+                <hr className="border-t border-2  border-cyan-500 grow w-10" />
+                <p className="text-lg opacity-75 mt-4">
+                  Get to know more about me, my background, and what drives me.
+                </p>
+              </div>
               <div className="card mb-12">
                 <div className="flex flex-col md:flex-row gap-8">
                   {aboutMe.imageUrl && (

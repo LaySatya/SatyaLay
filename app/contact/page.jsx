@@ -34,6 +34,8 @@ export default function ContactPage() {
 
   return (
     <MainLayout>
+      <Suspense>
+        
       <div className="min-h-screen py-4 px-4">
         <div className="max-w-6xl mx-auto">
 
@@ -102,6 +104,7 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
+      </Suspense>
     </MainLayout>
   );
 }

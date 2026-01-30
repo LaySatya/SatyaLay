@@ -74,6 +74,8 @@ export default function Birthday() {
 
   return (
     <MainLayout>
+      <Suspense>
+
       <div className="max-w-6xl mx-auto py-4">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 flex gap-4">
@@ -135,57 +137,58 @@ export default function Birthday() {
           </button>
         </div>
 
-       {showImage && (
-  <dialog open className="modal">
-    <div className="modal-box relative">
+        {showImage && (
+          <dialog open className="modal">
+            <div className="modal-box relative">
 
-      {/* CLOSE BUTTON */}
-      <button
-        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-        onClick={() => setShowImage(false)}
-      >
-        ✕
-      </button>
+              {/* CLOSE BUTTON */}
+              <button
+                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                onClick={() => setShowImage(false)}
+              >
+                ✕
+              </button>
 
-      {/* TITLE */}
-      <h2 className="text-xl font-bold mb-4 text-center">Pay me coffee!</h2>
+              {/* TITLE */}
+              <h2 className="text-xl font-bold mb-4 text-center">Pay me coffee!</h2>
 
-      {/* TOGGLE BUTTONS */}
-      <div className="flex justify-center gap-3 mb-4">
-        <button
-          className={`btn ${showUsd ? 'btn-active bg-cyan-500 text-white' : ''}`}
-          onClick={() => setShowUsd(true)}
-        >
-          Dollar (USD)
-        </button>
+              {/* TOGGLE BUTTONS */}
+              <div className="flex justify-center gap-3 mb-4">
+                <button
+                  className={`btn ${showUsd ? 'btn-active bg-cyan-500 text-white' : ''}`}
+                  onClick={() => setShowUsd(true)}
+                >
+                  Dollar (USD)
+                </button>
 
-        <button
-          className={`btn ${!showUsd ? 'btn-active bg-cyan-500 text-white' : ''}`}
-          onClick={() => setShowUsd(false)}
-        >
-          Riel (KHR)
-        </button>
+                <button
+                  className={`btn ${!showUsd ? 'btn-active bg-cyan-500 text-white' : ''}`}
+                  onClick={() => setShowUsd(false)}
+                >
+                  Riel (KHR)
+                </button>
+              </div>
+
+              {/* QR IMAGE */}
+              <div className="h-72 w-72 relative mx-auto">
+                <Image
+                  src={showUsd ? USD_QR : KHR_QR}
+                  alt="QR Code"
+                  fill
+                  className="object-cover rounded-xl"
+                />
+              </div>
+            </div>
+
+            {/* BACKDROP CLICK TO CLOSE */}
+            <form method="dialog" className="modal-backdrop">
+              <button onClick={() => setShowImage(false)}>close</button>
+            </form>
+          </dialog>
+        )}
+
       </div>
-
-      {/* QR IMAGE */}
-      <div className="h-72 w-72 relative mx-auto">
-        <Image
-          src={showUsd ? USD_QR : KHR_QR}
-          alt="QR Code"
-          fill
-          className="object-cover rounded-xl"
-        />
-      </div>
-    </div>
-
-    {/* BACKDROP CLICK TO CLOSE */}
-    <form method="dialog" className="modal-backdrop">
-      <button onClick={() => setShowImage(false)}>close</button>
-    </form>
-  </dialog>
-)}
-
-      </div>
+      </Suspense>
     </MainLayout>
   );
 }

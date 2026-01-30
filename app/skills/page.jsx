@@ -61,7 +61,10 @@ export default function SkillsPage() {
   if (loading) {
     return (
       <MainLayout>
-        <ClientLoading />
+       <Suspense>
+       
+               <ClientLoading />
+               </Suspense>
       </MainLayout>
     );
   }

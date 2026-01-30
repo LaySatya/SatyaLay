@@ -34,7 +34,10 @@ export default function ExperiencePage() {
   if (loading) {
     return (
       <MainLayout>
-        <ClientLoading />
+        <Suspense>
+        
+                <ClientLoading />
+                </Suspense>
       </MainLayout>
     );
   }

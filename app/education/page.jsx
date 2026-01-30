@@ -39,7 +39,10 @@ export default function EducationPage() {
   if (loading) {
     return (
       <MainLayout>
+        <Suspense>
+
         <ClientLoading />
+        </Suspense>
       </MainLayout>
     );
   }
