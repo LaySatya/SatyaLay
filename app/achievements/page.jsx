@@ -112,17 +112,17 @@ export default function Achievements() {
                   className="card border border-base-300 bg-base-100 shadow-sm hover:shadow-xl transition-all rounded-xl p-8 cursor-pointer"
                   onClick={() => setSelected(a)}
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex flex-col gap-4">
                     {a.imageUrl ? (
-                      <img
-                        src={a.imageUrl}
-                        alt={a.title}
-                        width={56}
-                        height={56}
-                        className="rounded-lg shadow object-cover"
-                      />
-                    ) 
-                    : (
+                      <div className="relative h-40 w-full rounded-xl overflow-hidden shadow-md">
+                        <Image
+                          src={a.imageUrl}
+                          alt={a.title}
+                          fill
+                          className="object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    ) : (
                       null
                     )}
 
@@ -150,54 +150,58 @@ export default function Achievements() {
           {/* Modal */}
           {selected && (
             <dialog open className="modal modal-open">
-              <div className="modal-box max-w-3xl p-6 rounded-xl">
+              <div className="modal-box max-w-5xl w-full p-0 rounded-xl overflow-hidden">
                 <form method="dialog">
                   <button
-                    className="btn btn-sm btn-circle absolute right-4 top-4"
+                    className="btn btn-sm btn-circle absolute right-4 top-4 z-10 bg-base-100/80"
                     onClick={() => setSelected(null)}
                   >
                     ✕
                   </button>
                 </form>
 
-                <div className="flex flex-col md:flex-row gap-6">
-                  <div className="md:w-1/3">
-                    {selected.imageUrl ? (
-                      <div className="relative h-48 w-full">
-                        <img
-                          src={selected.imageUrl}
-                          alt={selected.title}
-                          fill
-                          className="object-contain rounded-lg"
-                        />
-                      </div>
-                    ) : (
-                      <div className="h-48 w-full bg-base-200 rounded-lg flex items-center justify-center">
-                        No image
-                      </div>
+                {/* Full width image header */}
+                {selected.imageUrl ? (
+                  <div className="relative h-[400px] w-full">
+                    <Image
+                      src={selected.imageUrl}
+                      alt={selected.title}
+                      fill
+                      className="object-contain bg-base-200"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  </div>
+                ) : (
+                  <div className="h-[200px] w-full bg-base-200 flex items-center justify-center">
+                    <span className="text-6xl">🏆</span>
+                  </div>
+                )}
+
+                {/* Content below image */}
+                <div className="p-8">
+                  <div className="flex flex-wrap items-center gap-4 mb-4">
+                    <Pill>{selected.category || "Other"}</Pill>
+                    <span className="text-sm opacity-70">{selected.date}</span>
+                    {selected.issuer && (
+                      <span className="text-sm opacity-70">• {selected.issuer}</span>
                     )}
                   </div>
 
-                  <div className="flex-1">
-                    <h2 className="text-3xl font-bold">{selected.title}</h2>
-                    <p className="text-sm opacity-70 mt-1">
-                      {selected.date} • {selected.issuer}
-                    </p>
+                  <h2 className="text-4xl font-bold mb-4">{selected.title}</h2>
 
-                    <p className="mt-4 leading-relaxed text-base">
-                      {selected.description}
-                    </p>
+                  <p className="mt-4 leading-relaxed text-lg">
+                    {selected.description}
+                  </p>
 
-                    {selected.downloadUrl && (
-                      <a
-                        href={selected.downloadUrl}
-                        className="btn btn-primary mt-6"
-                        download
-                      >
-                        Download Certificate
-                      </a>
-                    )}
-                  </div>
+                  {selected.downloadUrl && (
+                    <a
+                      href={selected.downloadUrl}
+                      className="btn btn-primary mt-8"
+                      download
+                    >
+                      Download Certificate
+                    </a>
+                  )}
                 </div>
               </div>
 

@@ -94,9 +94,9 @@ export default function BlogPage() {
                 >
                   {/* Image section */}
                   <div className="relative h-48 w-full overflow-hidden">
-                    {post.imageUrl ? (
+                    {post.coverImage ? (
                       <Image
-                        src={post.imageUrl}
+                        src={post.coverImage}
                         alt={post.title}
                         fill
                         className="object-cover group-hover:scale-110 transition duration-500"
@@ -144,41 +144,48 @@ export default function BlogPage() {
           {/* ---- MODAL ---- */}
           {selected && (
             <dialog open className="modal">
-              <div className="modal-box max-w-4xl p-0 overflow-hidden">
+              <div className="modal-box max-w-5xl w-full p-0 overflow-hidden rounded-xl">
 
-                {/* IMAGE HEADER */}
-                <div className="relative h-64 w-full bg-base-200">
-                  {selected.imageUrl ? (
+                {/* Full width image header */}
+                <div className="relative h-[400px] w-full bg-base-200">
+                  {selected.coverImage ? (
                     <Image
-                      src={selected.imageUrl}
+                      src={selected.coverImage}
                       alt={selected.title}
                       fill
                       className="object-cover"
                     />
                   ) : (
                     <div className="flex items-center justify-center h-full">
-                      No Image
+                      <span className="text-6xl">📝</span>
                     </div>
                   )}
+                  {/* Gradient overlay for better visual */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  
+                  {/* Title overlay on image */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h2 className="text-4xl font-bold text-white mb-2">{selected.title}</h2>
+                    <div className="flex items-center gap-4 text-white/80 text-sm">
+                      <span>{selected.date}</span>
+                      {selected.author && <span>• By {selected.author}</span>}
+                    </div>
+                  </div>
                 </div>
 
+                {/* Close button on image */}
+                <button
+                  className="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 z-10 bg-base-100/80"
+                  onClick={() => setSelected(null)}
+                >
+                  ✕
+                </button>
+
                 {/* CONTENT */}
-                <div className="p-8 relative">
-                  <button
-                    className="btn btn-sm btn-circle btn-ghost absolute right-3 top-3"
-                    onClick={() => setSelected(null)}
-                  >
-                    ✕
-                  </button>
-
-                  <h2 className="text-3xl font-bold mb-2">{selected.title}</h2>
-                  <p className="opacity-70 text-sm mb-4">
-                    {selected.date} • {selected.author}
-                  </p>
-
+                <div className="p-8">
                   {/* Tags */}
                   {selected.tags?.length > 0 && (
-                    <div className="flex gap-2 flex-wrap mb-4">
+                    <div className="flex gap-2 flex-wrap mb-6">
                       {selected.tags.map((tag) => (
                         <span
                           key={tag}
@@ -188,6 +195,13 @@ export default function BlogPage() {
                         </span>
                       ))}
                     </div>
+                  )}
+
+                  {/* Category badge */}
+                  {selected.category && (
+                    <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-cyan-100 text-cyan-700 dark:bg-cyan-900 dark:text-cyan-300 mb-6">
+                      {selected.category}
+                    </span>
                   )}
 
                   {/* Full content */}

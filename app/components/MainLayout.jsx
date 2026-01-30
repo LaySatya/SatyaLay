@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 import { ServerStackIcon, HomeIcon } from "@heroicons/react/24/outline";
 
 import LanguageSwitcher from "./LanguageSwitcher";
+import RotatingStars from "./GlobeAnimation";
 import { useTranslations } from "next-intl";
 import { useLocale } from "../context/LocaleContext";
 
@@ -80,6 +81,9 @@ function MainLayoutContent({ children }) {
   return (
     // 1. Outer wrapper: Full screen height, hidden overflow to prevent body scroll
     <div className={`p-4 md:p-8 h-screen w-full overflow-hidden ${fontClass}`}>
+      
+      {/* Rotating stars background - only visible in dark mode */}
+      {theme === "dark" && <RotatingStars />}
       
       {/* 2. Mockup Window: set to h-full to fill the screen (minus padding) */}
       <div className="mockup-window  border border-base-300 h-full flex flex-col bg-base-100">
