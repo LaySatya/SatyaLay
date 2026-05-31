@@ -3,6 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
 import ClientIntlProvider from "./components/ClientIntlProvider";
 import { LocaleProvider } from "./context/LocaleContext";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -30,6 +31,7 @@ export default function RootLayout({ children, params }) {
             </ClientIntlProvider>
           </LocaleProvider>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
